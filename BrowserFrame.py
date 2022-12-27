@@ -24,6 +24,7 @@ class BrowserFrame(tk.Frame):
         assert self.browser
         self.browser.SetClientHandler(LifespanHandler(self))
         self.browser.SetClientHandler(LoadHandler(self))
+        self.browser.SetClientHandler(DisplayHandler())
         self.message_loop_work()
 
     def get_window_handle(self):

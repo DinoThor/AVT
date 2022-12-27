@@ -31,6 +31,7 @@ window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
     const { valence, arousal } = evt.detail.output;
     const { x, y } = get2DPoint({ valence, arousal });
     setPinPosition({ x, y });
+    console.log(valence, arousal)
 });
 
 CY.loader()
