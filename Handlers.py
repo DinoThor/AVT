@@ -7,12 +7,10 @@ class LoadHandler(object):
         self.browser_frame = browser_frame
 
 class DisplayHandler(object):
-    def OnConsoleMessage(self, browser, message, **_):
-        print(message)
-        return
-
+    def __init__(self, ds):
+        self.dataService = ds
     
-
-# class V8ContextHandler(object):
-#     def __init__(self) -> None:
-#         pass
+    def OnConsoleMessage(self, message, **_):
+        arousal, valence = message.split()[0], message.split()[2]
+        self.dataService.entryPoint(arousal, valence)
+        return

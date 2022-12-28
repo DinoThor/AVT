@@ -22,7 +22,7 @@ function get2DPoint({ valence, arousal }) {
 }
 
 function setPinPosition({ x, y }) {
-    const pin = document.getElementById("pin");
+    const pin = document.getElementById("pin");                
     pin.style.left = `${x - pin_radius_x}%`; // check img ratio to avoid ellipse
     pin.style.bottom = `${y - PIN_RADIUS}%`;
 }
@@ -31,10 +31,13 @@ window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
     const { valence, arousal } = evt.detail.output;
     const { x, y } = get2DPoint({ valence, arousal });
     setPinPosition({ x, y });
-    console.log(valence, arousal)
+
+    console.log(valence + '|' + arousal);
 });
 
 CY.loader()
+    // CLAVE API HARDCODEADA
+    // TODO: CREAR UN ARCHIVO CONFIG Y OBTENERLA DE AHI
     .licenseKey("0c1147cda5c900085bac32b44d10bf923c2edcd791ac")
     .addModule(CY.modules().FACE_AROUSAL_VALENCE.name, { smoothness: 0.8 })
     .load()

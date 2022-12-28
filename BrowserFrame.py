@@ -1,6 +1,7 @@
 from cefpython3 import cefpython as cef
 from Handlers import *
 from BrowserFrame import *
+from DataService import DataService
 import tkinter as tk
 import ctypes
 import platform
@@ -12,6 +13,7 @@ class BrowserFrame(tk.Frame):
         self.browser    = None
         self.url        = url
         self.mainframe  = mainframe
+        self.ds         = DataService()
 
         tk.Frame.__init__(self, mainframe)
         self.bind("<Configure>", self.on_configure)
@@ -24,7 +26,7 @@ class BrowserFrame(tk.Frame):
         assert self.browser
         self.browser.SetClientHandler(LifespanHandler(self))
         self.browser.SetClientHandler(LoadHandler(self))
-        self.browser.SetClientHandler(DisplayHandler())
+        self.browser.SetClientHandler(DisplayHandler(self.ds))
         self.message_loop_work()
 
     def get_window_handle(self):
