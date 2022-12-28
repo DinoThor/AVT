@@ -14,4 +14,3 @@ class DataService():
     def entryPoint(self, arousal, valence):
         self.arousalVector.append(arousal)
         self.valenceVector.append(valence)
-        print(self.arousalVector) # TEST

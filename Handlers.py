@@ -11,6 +11,7 @@ class DisplayHandler(object):
         self.dataService = ds
     
     def OnConsoleMessage(self, message, **_):
-        arousal, valence = message.split()[0], message.split()[2]
+        rawData = message.split('|')
+        arousal, valence = rawData[0], rawData[1]
         self.dataService.entryPoint(arousal, valence)
         return
