@@ -11,13 +11,14 @@ import sys
 def main():
     # Create MorphCast SDK
     sdk = localSDK()
-    global freePort
-    freePort = sdk.returnFreePort()
+    global freePort; freePort = sdk.returnFreePort()
     sdkThread = thread.Thread(target=sdk.start)
     sdkThread.start()
 
-    # Sql Server
+    # Sqlite
     dataService = DataService()
+    # sqlThread = thread.Thread(target = dataService.run())
+    # sqlThread.start()
 
     sys.excepthook = cef.ExceptHook
     root = tk.Tk()
