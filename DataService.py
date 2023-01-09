@@ -1,4 +1,7 @@
+from time import time, sleep
+
 import sqlite3
+import os
 """
     Clase DataService
 
@@ -14,12 +17,31 @@ class DataService():
 
         self.initDB("database.db")
 
-    def initDB(self, db):
-        self.con = sqlite3.connect(f"..\\SQL\\{db}")
+    
 
     def entryPoint(self, arousal, valence):
         self.arousalVector.append(arousal)
         self.valenceVector.append(valence)
+
+    """
+        Inicialización / creación de la base de datos
+    """
+    def initDB(self, db):
+        file = f"..\\SQL\\{db}"
+        self.con = sqlite3.connect(file)
+        if (os.stat(file).st_size == 0): 
+            self.createDb()
+            
+    def createDb(self):
+        cur = self.con.cursor()
+        commands = [
+            "CREATE TABLE usuario(id, nombre, edad, sexo, idioma_pref, email, telefono, persona_contacto)",
+            "CREATE TABLE reg_dimensional(id, avg_arousal, avg_valence, reg_detail)",
+            "CREATE TABLE detail(reg_detail, arousal, valence, fecha, event)",
+            "CREATE TABLE events(event_id, accion, comentarios)",
+            "CREATE TABLE idiomas(idioma_id, idioma)"
+        ]
+        for c in commands: cur.execute(c)
 
     """
         Bucle principal de ejecución:
@@ -29,5 +51,5 @@ class DataService():
         ejecución de las correspondientes acciones en caso
         de detectarse los "picos" anímicos
     """
-    def run(self):
-        pass
+    def calculate(self):
+        print("CARLOS")
