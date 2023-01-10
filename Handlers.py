@@ -13,5 +13,5 @@ class DisplayHandler(object):
     def OnConsoleMessage(self, message, **_):
         rawData = message.split('|')
         arousal, valence = rawData[0], rawData[1]
-        self.dataService.entryPoint(arousal, valence)
+        self.dataService.entryPoint(float(arousal), float(valence))
         return

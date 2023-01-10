@@ -3,13 +3,13 @@ from SDK.localSDK   import localSDK
 from Handlers       import *
 from BrowserFrame   import *
 from MainFrame      import MainFrame
-from DataService    import DataService
+from DB.DataService    import DataService
 import threading    as thread
 import tkinter      as tk
 import sys
-import os
 
 def main():
+    running = True
     # Create MorphCast SDK
     sdk = localSDK()
     global freePort; freePort = sdk.returnFreePort()
@@ -18,19 +18,21 @@ def main():
     sdkThread.start()
 
     # Sqlite
-    dataService = DataService()
+    dataService = DataService(1)
     def sqlLoop():
-        thread.Timer(5.0, sqlLoop).start()
-        dataService.calculate()
-    sqlLoop()
+        if running: 
+            thread.Timer(5.0, sqlLoop).start()
+            dataService.calculate()
 
     sys.excepthook = cef.ExceptHook
     root = tk.Tk()
-    app  = MainFrame(root, freePort)
+    app  = MainFrame(root, freePort, dataService)
     cef.Initialize(commandLineSwitches = {"enable-media-stream": " "})
     
     # =============
+    thread.Timer(10.0, sqlLoop).start()
     app.mainloop()
+    
     # =============
 
     cef.Shutdown()

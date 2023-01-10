@@ -1,19 +1,19 @@
 from cefpython3 import cefpython as cef
 from Handlers import *
 from BrowserFrame import *
-from DataService import DataService
+from DB.DataService import DataService
 import tkinter as tk
 import ctypes
 import platform
 
 class BrowserFrame(tk.Frame):
 
-    def __init__(self, mainframe, url):
+    def __init__(self, mainframe, url, ds):
         self.closing    = False
         self.browser    = None
         self.url        = url
         self.mainframe  = mainframe
-        self.ds         = DataService()
+        self.ds         = ds
 
         tk.Frame.__init__(self, mainframe)
         self.bind("<Configure>", self.on_configure)
