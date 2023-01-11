@@ -130,3 +130,6 @@ dmypy.json
 
 # Any log
 *.log
+
+#etc
+notas.txt
