@@ -29,7 +29,11 @@ class DataService():
         En caso contrario, la crea automáticamente
     """
     def checkRegId(self, user):
-        id = self.cur.execute("""SELECT u.id FROM usuario u, reg_dimensional rg WHERE u.id = rg.id""")
+        id = self.cur.execute("""
+            SELECT u.id 
+            FROM usuario u, reg_dimensional rg 
+            WHERE u.id = rg.id
+        """)
         if (id is None):
             self.cur.execute(f"INSERT INTO reg_dimensional(id) VALUES {user}")
             self.con.commit()
@@ -40,13 +44,37 @@ class DataService():
         una nueva base de datos
     """
     def createDb(self):
-        self.cur.executescript("""
-            BEGIN
-            CREATE TABLE usuario(id, nombre, edad, sexo, idioma_pref, email, telefono, persona_contacto)
-            CREATE TABLE reg_dimensional(id, avg_arousal, avg_valence)
-            CREATE TABLE detail(id, arousal, valence, fecha, evento)
-            CREATE TABLE event(event_id, accion, comentarios)
-            COMMIT
+        self.cur.executescript(
+        """
+            BEGIN;
+            CREATE TABLE IF NOT EXISTS usuario (
+                id integer PRIMARY KEY, 
+                nombre text NOT NULL, 
+                edad integer NOT NULL, 
+                sexo text NOT NULL, 
+                idioma_pref text, 
+                email text, 
+                telefono integer, 
+                persona_contacto integer
+            );
+            CREATE TABLE IF NOT EXISTS reg_dimensional (
+                id integer PRIMARY KEY, 
+                avg_arousal float NOT NULL, 
+                avg_valence float NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS detail (
+                id integer PRIMARY KEY, 
+                arousal float NOT NULL, 
+                valence float NOT NULL, 
+                fecha datetime NOT NULL, 
+                evento integer
+            );
+            CREATE TABLE IF NOT EXISTS event (
+                event_id integet PRIMARY KEY, 
+                accion integer NOT NULL, 
+                comentarios text NOT NULL
+            );
+            COMMIT;
         """)
 
     """

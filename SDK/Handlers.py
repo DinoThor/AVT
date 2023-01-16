@@ -7,11 +7,11 @@ class LoadHandler(object):
         self.browser_frame = browser_frame
 
 class DisplayHandler(object):
-    def __init__(self, ds):
-        self.dataService = ds
+    def __init__(self, pl):
+        self.PatternLoop = pl
     
     def OnConsoleMessage(self, message, **_):
         rawData = message.split('|')
         arousal, valence = rawData[0], rawData[1]
-        self.dataService.entryPoint(float(arousal), float(valence))
+        self.PatternLoop.getData(float(arousal), float(valence))
         return
