@@ -22,11 +22,14 @@ def main():
     cef.Initialize(commandLineSwitches = {"enable-media-stream": " "})
     
     # =============
+    patternLoop.VectorLoop()
     app.mainloop()
     # =============
 
     cef.Shutdown()
     SDK.httpd.shutdown()
+    patternLoop.running = False
+
 
 if __name__ == '__main__':
     main()

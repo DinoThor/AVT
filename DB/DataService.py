@@ -9,7 +9,7 @@ class DataService():
         self.con = None #Connection
         self.cur = None #Cursor
         self.initDB("database.db")
-        self.checkRegId(user)
+        self.checkRegId()
 
     """
         Inicialización/creación de la base de datos
@@ -18,7 +18,7 @@ class DataService():
     """
     def initDB(self, db):
         file = f"DB\\{db}"
-        self.con = sqlite3.connect(file)
+        self.con = sqlite3.connect(file, check_same_thread = False)
         self.cur = self.con.cursor()
 
         if os.stat(file).st_size == 0: self.createDb()  
@@ -28,14 +28,16 @@ class DataService():
         en la tabla de registros dimensionales.
         En caso contrario, la crea automáticamente
     """
-    def checkRegId(self, user):
-        id = self.cur.execute("""
+    def checkRegId(self):
+        exe = self.cur.execute(f"""
             SELECT u.id 
             FROM usuario u, reg_dimensional rg 
-            WHERE u.id = rg.id
+            WHERE u.id = rg.id AND u.id =  {self.user}
         """)
+        id = exe.fetchone()
+        print(id)
         if (id is None):
-            self.cur.execute(f"INSERT INTO reg_dimensional(id) VALUES {user}")
+            self.cur.execute(f"INSERT INTO reg_dimensional(id, avg_arousal, avg_valence) VALUES ({self.user}, 0, 0)")
             self.con.commit()
 
     """
@@ -63,7 +65,7 @@ class DataService():
                 avg_valence float NOT NULL
             );
             CREATE TABLE IF NOT EXISTS detail (
-                id integer PRIMARY KEY, 
+                id integer NOT NULL, 
                 arousal float NOT NULL, 
                 valence float NOT NULL, 
                 fecha datetime NOT NULL, 
@@ -82,7 +84,9 @@ class DataService():
     """
     def insertDetail(self, arousalAvg, valenceAvg, fecha, evento=None):
         if evento is None:
-            insert = f"INSERT INTO details(id, arousal, valence, fecha) VALUES({self.user}, {arousalAvg}, {valenceAvg}, {fecha})"
+            insert = f"INSERT INTO detail(id, arousal, valence, fecha) VALUES({self.user}, {arousalAvg}, {valenceAvg}, '{fecha}')"
         else:
-            insert = f"INSERT INTO details(id, arousal, valence, fecha, evento) VALUES({self.user}, {arousalAvg}, {valenceAvg}, {fecha}, {evento})"
+            insert = f"INSERT INTO detail(id, arousal, valence, fecha, evento) VALUES({self.user}, {arousalAvg}, {valenceAvg}, {fecha}, {evento})"
+        
         self.cur.execute(insert)
+        self.con.commit()
