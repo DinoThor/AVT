@@ -84,9 +84,39 @@ class DataService():
     """
     def insertDetail(self, arousalAvg, valenceAvg, fecha, evento=None):
         if evento is None:
-            insert = f"INSERT INTO detail(id, arousal, valence, fecha) VALUES({self.user}, {arousalAvg}, {valenceAvg}, '{fecha}')"
+            insert = f"""
+            INSERT INTO detail(id, arousal, valence, fecha) 
+            VALUES({self.user}, {arousalAvg}, {valenceAvg}, '{fecha}')
+        """
         else:
-            insert = f"INSERT INTO detail(id, arousal, valence, fecha, evento) VALUES({self.user}, {arousalAvg}, {valenceAvg}, {fecha}, {evento})"
+            insert = f"""
+            INSERT INTO detail(id, arousal, valence, fecha, evento) 
+            VALUES({self.user}, {arousalAvg}, {valenceAvg}, {fecha}, {evento})
+        """
         
         self.cur.execute(insert)
+        self.con.commit()
+
+    """
+        Actualiza la media del registro dimensional
+    """
+    def updateRegDim(self, arousal, valence):
+        query = f"""
+            SELECT avg_arousal, avg_valence 
+            FROM reg_dimensional 
+            WHERE id = {self.user}
+        """
+        self.cur.execute(query)
+        avgArousal, avgValence = self.cur.fetchall()[0]
+        avgArousal = (avgArousal + arousal) / 2
+        avgValence = (avgValence + valence) / 2
+        
+        update = f"""
+            UPDATE reg_dimensional
+            SET avg_arousal = {avgArousal},
+                avg_valence = {avgValence}
+            WHERE
+                id = {self.user}
+        """
+        self.cur.execute(update)
         self.con.commit()
