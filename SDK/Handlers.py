@@ -11,7 +11,5 @@ class DisplayHandler(object):
         self.PatternLoop = pl
     
     def OnConsoleMessage(self, message, **_):
-        rawData = message.split('|')
         arousal, valence = message.split('|')
         self.PatternLoop.getData(float(arousal), float(valence))
-        return
