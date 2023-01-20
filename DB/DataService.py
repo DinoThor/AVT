@@ -9,7 +9,6 @@ class DataService():
         self.con = None #Connection
         self.cur = None #Cursor
         self.initDB("database.db")
-        self.checkRegId()
 
     """
         Inicialización/creación de la base de datos
@@ -17,11 +16,12 @@ class DataService():
         No hace falta tratar las excepciones
     """
     def initDB(self, db):
-        file = f"DB\\{db}"
+        file     = f"DB\\{db}"
         self.con = sqlite3.connect(file, check_same_thread = False)
         self.cur = self.con.cursor()
 
         if os.stat(file).st_size == 0: self.createDb()  
+        self.checkRegId()
 
     """
         Comprueba si existe una entrada con el id del usuario
@@ -32,10 +32,9 @@ class DataService():
         exe = self.cur.execute(f"""
             SELECT u.id 
             FROM usuario u, reg_dimensional rg 
-            WHERE u.id = rg.id AND u.id =  {self.user}
+            WHERE u.id = rg.id AND u.id = {self.user}
         """)
         id = exe.fetchone()
-        print(id)
         if (id is None):
             self.cur.execute(f"INSERT INTO reg_dimensional(id, avg_arousal, avg_valence) VALUES ({self.user}, 0, 0)")
             self.con.commit()
@@ -51,7 +50,7 @@ class DataService():
             BEGIN;
             CREATE TABLE IF NOT EXISTS usuario (
                 id integer PRIMARY KEY, 
-                nombre text NOT NULL, 
+                nombre text NOT NULL AUTO_INCREMENT, 
                 edad integer NOT NULL, 
                 sexo text NOT NULL, 
                 idioma_pref text, 
@@ -78,6 +77,26 @@ class DataService():
             );
             COMMIT;
         """)
+
+
+    """
+        Crea la entrada del usuario
+    """
+    def createUser(self, nombre, edad, sexo, 
+                    idioma = None, email = None, telefono = None, p_contacto = None):
+        insert = f"""
+            INSERT INTO usuario
+            (nombre, edad, sexo, idioma_pref, email, telefono, persona_contacto)
+            VALUES
+            ({nombre}, {edad}, {sexo}, {idioma}, {email}, {telefono}, {p_contacto})
+        """
+        try:
+            self.cur.execute(insert)
+            self.con.commit()
+        except:
+            pass
+
+        return self.cur.lastrowid
 
     """
         Inserta una nueva entrada en la tabla de detail

@@ -10,26 +10,32 @@ import tkinter          as tk
 import sys
 
 def main():
-    SDK         = localSDK()
-    dataService = DataService(1) #USER HARDCODED PARA PRUEBAS
+    
+    init()
+   
+    app.mainloop(); patternLoop.VectorLoop()
+
+    shutdown()
+
+def init():
+    global SDK
+    global dataService
+    global patternLoop
+    global app
+
+    SDK = localSDK()
+    dataService = DataService(1)            #USER HARDCODED PARA PRUEBAS
     patternLoop = PatternLoop(dataService)
-    #SDK Thread
-    thread.Thread(target=SDK.start).start()
-    #CEF & Tkinter
-    sys.excepthook = cef.ExceptHook
+    thread.Thread(target=SDK.start).start() #SDK Thread
+    sys.excepthook = cef.ExceptHook         #CEF & Tkinter
     root = tk.Tk()
     app  = MainFrame(root, SDK.port, patternLoop)
     cef.Initialize(commandLineSwitches = {"enable-media-stream": " "})
-    
-    # =============
-    patternLoop.VectorLoop()
-    app.mainloop()
-    # =============
 
+def shutdown():
     cef.Shutdown()
     SDK.httpd.shutdown()
     patternLoop.running = False
-
 
 if __name__ == '__main__':
     main()
