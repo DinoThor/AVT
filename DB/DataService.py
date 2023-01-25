@@ -1,8 +1,8 @@
 import sqlite3
 import os
-from commands import query
-from commands import insert
-from commands import createDataBase
+from DB.commands import query
+from DB.commands import insert
+from DB.commands import createDataBase
 
 
 class DataService:
@@ -12,6 +12,7 @@ class DataService:
         self.cur = None
         self.initDB("databaseDev.db")
 
+
     def initDB(self, db):
         file = f"DB\\{db}"
         self.con = sqlite3.connect(file, check_same_thread=False)
@@ -19,15 +20,15 @@ class DataService:
 
         if os.stat(file).st_size == 0:
             self.createDb()
-            self.createUser()
 
-        userId = self.cur.execute(query["searchUser"], {self.user})
-        if id.fetchone() is None:
-            self.createUser()
+        userId = self.cur.execute(query["searchUser"], (self.user,)).fetchone()
+        print(userId)
+        if userId is None:
+            self.createUser("test", 30, "Male")
 
-        regId = self.cur.execute(query["searechReg"], {self.user})
-        if regId.fetchone() is None:
-            self.cur.execute(insert["insertReg"], {self.user})
+        regId = self.cur.execute(query["searchReg"], (self.user,)).fetchone() 
+        if regId is None:
+            self.cur.execute(insert["insertReg"], (self.user,))
             self.con.commit()
 
     def createDb(self):
@@ -63,7 +64,7 @@ class DataService:
     #     avgArousal, avgValence = self.cur.fetchall()[0]
     #     avgArousal = (avgArousal + arousal) / 2
     #     avgValence = (avgValence + valence) / 2
-    # 
+    #
     #     update = f"""
     #         UPDATE reg_dimensional
     #         SET avg_arousal = {avgArousal},
