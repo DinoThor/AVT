@@ -133,6 +133,6 @@ dmypy.json
 
 #etc
 notas.txt
-.vscode
+.vscode/
 
-.idea
+.idea/
