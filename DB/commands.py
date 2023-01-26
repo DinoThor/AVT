@@ -39,5 +39,12 @@ createDataBase = """
                 accion integer NOT NULL, 
                 comentarios text NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS persona_contacto (
+                id integer PRIMARY KEY,
+                email text NOT NULL,
+                telefono integer,
+                nombre text NOT NULL,
+                parentesco text
+            );
             COMMIT;
             """
