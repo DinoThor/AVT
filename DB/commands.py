@@ -4,10 +4,10 @@ query = {
 }
 
 insert = {
-    "insertReg": "INSERT INTO reg_dimensional(id, avg_arousal, avg_valence) VALUES (?, 0, 0)",
+    "insertReg": "INSERT INTO reg_dimensional(id, avg_arousal, avg_valence) VALUES (?, ?, ?)",
     "insertUser": "INSERT INTO usuario (nombre, edad, sexo, idioma_pref, email, telefono, persona_contacto) VALUES ?, "
                   "?, ?, ?, ?, ?, ?)",
-    "insertDetail": "INSERT INTO detail(id, arousal, valence, fecha) VALUES(?, ?, ?, '?', ?)"
+    "insertDetail": "INSERT INTO detail(id, arousal, valence, fecha, evento) VALUES(?, ?, ?, ?, ?)"
 }
 
 createDataBase = """

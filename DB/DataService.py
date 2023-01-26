@@ -6,11 +6,11 @@ from DB.commands import createDataBase
 
 
 class DataService:
-    def __init__(self, user):
+    def __init__(self, user=1):
         self.user = user
         self.con = None
         self.cur = None
-        self.initDB("databaseDev.db")
+        self.initDB("database.db")
 
 
     def initDB(self, db):
@@ -21,28 +21,23 @@ class DataService:
         if os.stat(file).st_size == 0:
             self.createDb()
 
-        userId = self.cur.execute(query["searchUser"], (self.user,)).fetchone()
-        print(userId)
-        if userId is None:
-            self.createUser("test", 30, "Male")
-
-        regId = self.cur.execute(query["searchReg"], (self.user,)).fetchone() 
-        if regId is None:
-            self.cur.execute(insert["insertReg"], (self.user,))
-            self.con.commit()
-
     def createDb(self):
         self.cur.executescript(createDataBase)
 
+
     def createUser(self, nombre, edad, sexo,
                    idioma=None, email=None, telefono=None, p_contacto=None):
-        try:
-            self.cur.execute(insert["insertUser"],
-                             (nombre, edad, sexo, idioma, email, telefono, p_contacto))
-            self.con.commit()
-        except:
-            pass
 
+        if self.cur.execute(query["SearchUser"], (self.id, )).fetchone is not None:
+            raise Exception("Usuario ya creado")
+
+        self.cur.execute(insert["insertUser"],
+                        (nombre, edad, sexo, idioma, email, telefono, p_contacto))
+
+        self.cur.execute(insert["insertReg"], 
+                        (self.user, 0, 0))
+
+        self.con.commit()
         return self.cur.lastrowid
 
     """
@@ -51,7 +46,7 @@ class DataService:
 
     def insertDetail(self, arousalAvg, valenceAvg, fecha, evento=None):
         self.cur.execute(insert["insertDetail"],
-                         (arousalAvg, valenceAvg, fecha, evento))
+                         (self.user, arousalAvg, valenceAvg, fecha, evento,))
         self.con.commit()
 
     # def updateRegDim(self, arousal, valence):

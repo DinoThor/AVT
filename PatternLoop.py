@@ -21,19 +21,21 @@ class PatternLoop():
         except ZeroDivisionError:
             self.arousal.clear()
             self.valence.clear()
-            if self.running: threading.Timer(5.0, self.VectorLoop).start()
+            if self.running: 
+                threading.Timer(5.0, self.VectorLoop).start()
             return
 
         instance   = datetime.datetime.now()
         event      = self.detectEvent(arousalAvg, valenceAvg)
 
         self.dataService.insertDetail(arousalAvg, valenceAvg, instance, event)
-        self.dataService.updateRegDim(arousalAvg, valenceAvg)
+        #self.dataService.updateRegDim(arousalAvg, valenceAvg)
 
         self.arousal.clear()
         self.valence.clear()
 
-        if self.running: threading.Timer(5.0, self.VectorLoop).start()
+        if self.running: 
+            threading.Timer(5.0, self.VectorLoop).start()
 
     """
         Return:

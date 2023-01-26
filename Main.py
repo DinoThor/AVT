@@ -12,8 +12,8 @@ def main():
     
     init()
    
+    patternLoop.VectorLoop() 
     app.mainloop()
-    patternLoop.VectorLoop()
 
     shutdown()
 
@@ -25,7 +25,7 @@ def init():
     global app
 
     SDK = LocalSDK()
-    dataService = DataService(1)            #USER HARDCODED PARA PRUEBAS
+    dataService = DataService()
     patternLoop = PatternLoop(dataService)
     thread.Thread(target=SDK.start).start() #SDK Thread
     sys.excepthook = cef.ExceptHook         #CEF & Tkinter
