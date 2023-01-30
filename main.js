@@ -1,9 +1,16 @@
-// Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 
+const statik = require('@brettz9/node-static');
+const file = new statik.Server(`${__dirname}/www`, { cache: 0 })
+
+require('http').createServer(function (request, response) {
+    request.addListener('end', function () {
+        file.serve(request, response)
+    }).resume()
+}).listen(9990, "127.0.0.1");
+
 function createWindow () {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -12,19 +19,14 @@ function createWindow () {
     }
   })
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  mainWindow.loadURL('http://localhost:9990')
 
-  // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow()
-
+  
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -38,6 +40,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

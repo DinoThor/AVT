@@ -1,24 +1,24 @@
 {
-  "name": "morph_cast",
+  "name": "morphcast-vrain",
   "version": "1.0.0",
-  "description": "SDK integrated within Electron application",
+  "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/DinoThor/MorphCast_GUI",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Electron"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Aarón Raya López",
+  "license": "MIT",
   "devDependencies": {
-    "electron": "^18.2.2",
-    "http-server": "^14.1.0",
-    "@brettz9/node-static": "^0.1.1"
+    "@brettz9/node-static": "^0.1.1",
+    "electron": "^22.1.0",
+    "http-server": "^14.1.0"
+  },
+  "dependencies": {
+    "electron-winstaller": "^5.1.0",
+    "sqlite3": "^5.1.4"
   }
 }
