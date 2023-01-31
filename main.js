@@ -1,22 +1,23 @@
-const {app, BrowserWindow, Menu, nativeImage, Tray} = require('electron')
+const { app, BrowserWindow, Menu, nativeImage, Tray, dialog } = require('electron')
+const sqlite = require('./db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
 const file = new statik.Server(`${__dirname}/www`, { cache: 0 })
 
 require('http').createServer(function (request, response) {
-    request.addListener('end', function () {
-        file.serve(request, response)
-    }).resume()
+  request.addListener('end', function () {
+    file.serve(request, response)
+  }).resume()
 }).listen(9990, "127.0.0.1");
 
 let mainWindow
 
-function createWindow () {
+function createWindow() {
   if (!tray) {
     createTray()
   }
-  
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -35,12 +36,15 @@ function createWindow () {
     mainWindow.hide()
   })
 
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
+  var db = sqlite
   createWindow()
   
+  
+
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -49,7 +53,7 @@ app.whenReady().then(() => {
 })
 
 let tray = null
-function createTray () {
+function createTray() {
   const icon = path.join(__dirname, 'assets/tray.jpg')
   const trayicon = nativeImage.createFromPath(icon)
   tray = new Tray(trayicon.resize({ width: 16 }))
