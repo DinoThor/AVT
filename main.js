@@ -3,6 +3,7 @@ const sqlite = require('./db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
+const { title } = require('process');
 const file = new statik.Server(`${__dirname}/www`, { cache: 0 })
 const filepath = './db/database.db'
 
@@ -10,6 +11,7 @@ const DEBUG = true
 
 var db = sqlite.connection(filepath)
 var mainWindow
+var tray
 
 require('http').createServer(function (request, response) {
   request.addListener('end', function () {
@@ -49,7 +51,7 @@ function createWindow() {
 app.whenReady().then(() => {
   ipcMain.on('new-data', handleDataSDK)
   createWindow()
-  
+
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -57,11 +59,10 @@ app.whenReady().then(() => {
   })
 })
 
-let tray = null
+
 function createTray() {
-  const icon = path.join(__dirname, 'assets/tray.jpg')
-  const trayicon = nativeImage.createFromPath(icon)
-  tray = new Tray(trayicon.resize({ width: 16 }))
+  tray = new Tray(path.join(__dirname, 'assets/tray.ico'))
+  tray.setToolTip('MorphCast VRAIN')
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Abrir ventana',
@@ -81,6 +82,6 @@ function createTray() {
   tray.setContextMenu(contextMenu)
 }
 
-function handleDataSDK (e, values) {
+function handleDataSDK(e, values) {
   sqlite.insertDetail(db, values)
 }
