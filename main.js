@@ -1,9 +1,15 @@
-const { app, BrowserWindow, Menu, nativeImage, Tray, dialog } = require('electron')
+const { app, BrowserWindow, Menu, nativeImage, Tray, ipcMain } = require('electron')
 const sqlite = require('./db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
 const file = new statik.Server(`${__dirname}/www`, { cache: 0 })
+const filepath = './db/database.db'
+
+const DEBUG = true
+
+var db = sqlite.connection(filepath)
+var mainWindow
 
 require('http').createServer(function (request, response) {
   request.addListener('end', function () {
@@ -11,7 +17,7 @@ require('http').createServer(function (request, response) {
   }).resume()
 }).listen(9990, "127.0.0.1");
 
-let mainWindow
+
 
 function createWindow() {
   if (!tray) {
@@ -22,7 +28,8 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      devTools: DEBUG
     },
 
     show: false,
@@ -40,11 +47,9 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  var db = sqlite
+  ipcMain.on('new-data', handleDataSDK)
   createWindow()
   
-  
-
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -74,4 +79,8 @@ function createTray() {
   ])
 
   tray.setContextMenu(contextMenu)
+}
+
+function handleDataSDK (e, values) {
+  sqlite.insertDetail(db, values)
 }

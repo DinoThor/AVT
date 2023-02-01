@@ -1,17 +1,16 @@
 const sqlite3 = require('sqlite3').verbose()
 const fs = require('fs')
-const filepath = './database.db'
 
-function connection() {
+function connection(filepath) {
     if (fs.existsSync(filepath)) {
         return new sqlite3.Database(filepath);
     } else {
         var db = new sqlite3.Database('./database.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
             if (err) console.error(err.message);
         })
-        createTables(db)
+        createTables(db);
     }
-    return db
+    return db;
 }
 
 function createTables(db) {
@@ -53,4 +52,17 @@ function createTables(db) {
     `)
 }
 
-module.exports = connection()
+function insertDetail(db, values, event = null) {
+    db.run(`INSERT INTO detail(id, arousal, valence, fecha, evento)
+            VALUES(1, $arousal, $valence, $fecha, $evento)`, {
+                $arousal: values['a'],
+                $valence: values['v'],
+                $fecha: Date.now(),
+                $evento: event
+            },
+            e => {
+                if (e) return console.log(e.message)
+            });
+}
+
+module.exports = { connection, insertDetail }

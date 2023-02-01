@@ -47,5 +47,5 @@ window.setInterval(() => {
     if (isNaN(avg['a']) || isNaN(avg['v'])) {
         return
     }
-    console.log(avg)
+    window.electronAPI.insertData(avg)
 }, 5000)
