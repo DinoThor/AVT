@@ -57,7 +57,7 @@ function insertDetail(db, values, event = null) {
             VALUES(1, $arousal, $valence, $fecha, $evento)`, {
                 $arousal: values['a'],
                 $valence: values['v'],
-                $fecha: Date.now(),
+                $fecha: new Date().toISOString(),
                 $evento: event
             },
             e => {
