@@ -3,7 +3,7 @@ const { connection, insertDetail } = require('../db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
-const file = new statik.Server(`${__dirname}/sdk`, { cache: 0 })
+const file = new statik.Server(path.join(__dirname, '../sdk'), { cache: 0 })
 const filepath = './db/database.db'
 
 const DEBUG = true
