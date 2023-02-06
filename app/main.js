@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron')
-const { connection, insertDetail } = require('./db/sqlite')
+const { connection, insertDetail } = require('../db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
