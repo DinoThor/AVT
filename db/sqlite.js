@@ -5,7 +5,7 @@ function connection(filepath) {
     if (fs.existsSync(filepath)) {
         return new sqlite3.Database(filepath);
     } else {
-        var db = new sqlite3.Database('./database.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+        var db = new sqlite3.Database('./db/database.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
             if (err) console.error(err.message);
         })
         createTables(db);
@@ -24,11 +24,12 @@ function createTables(db) {
             email text, 
             telefono integer, 
             persona_contacto integer
+            config text
         );
-        CREATE TABLE IF NOT EXISTS reg_dimensional (
+        CREATE TABLE IF NOT EXISTS analisis (
             id integer PRIMARY KEY, 
-            avg_arousal float NOT NULL, 
-            avg_valence float NOT NULL
+            avg_arousal float, 
+            avg_valence float
         );
         CREATE TABLE IF NOT EXISTS detail (
             id integer NOT NULL, 
@@ -52,9 +53,10 @@ function createTables(db) {
     `)
 }
 
-function insertDetail(db, values, event = null) {
+function insertDetail(db, user, values, event = null) {
     db.run(`INSERT INTO detail(id, arousal, valence, fecha, evento)
-            VALUES(1, $arousal, $valence, $fecha, $evento)`, {
+            VALUES($user, $arousal, $valence, $fecha, $evento)`, {
+                $user: user,
                 $arousal: values['a'],
                 $valence: values['v'],
                 $fecha: new Date().toISOString(),

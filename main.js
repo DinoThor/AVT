@@ -1,15 +1,14 @@
-const { app, BrowserWindow, Menu, nativeImage, Tray, ipcMain } = require('electron')
-const sqlite = require('./db/sqlite')
+const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron')
+const { connection, insertDetail } = require('./db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
-const { title } = require('process');
-const file = new statik.Server(`${__dirname}/www`, { cache: 0 })
+const file = new statik.Server(`${__dirname}/sdk`, { cache: 0 })
 const filepath = './db/database.db'
 
 const DEBUG = true
 
-var db = sqlite.connection(filepath)
+var db = connection(filepath)
 var mainWindow
 var tray
 
@@ -20,37 +19,33 @@ require('http').createServer(function (request, response) {
 }).listen(9990, "127.0.0.1");
 
 
+function createSdk() {
+  sdkWindow = new BrowserWindow({
+    width: 800, height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+    },
+    show: false,
+  })
+  sdkWindow.loadURL('http://localhost:9990')
+  sdkWindow.on('close', e => {
+    e.preventDefault()
+    mainWindow.hide()
+  })
+}
 
 function createWindow() {
   if (!tray) {
     createTray()
   }
 
-  mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      devTools: DEBUG
-    },
 
-    show: false,
-    autoHideMenuBar: true
-  })
 
-  mainWindow.loadURL('http://localhost:9990')
-
-  mainWindow.on('close', e => {
-    e.preventDefault()
-    mainWindow.hide()
-  })
-
-  mainWindow.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
   ipcMain.on('new-data', handleDataSDK)
-  createWindow()
+  createSdk()
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -71,9 +66,15 @@ function createTray() {
       }
     },
     {
+      label: 'Abrir ajuster',
+      click: () => {
+
+      }
+    },
+    {
       label: 'Cerrar',
       click: () => {
-        mainWindow.destroy()
+        sdkWindow.destroy()
         app.quit()
       }
     },
@@ -82,6 +83,4 @@ function createTray() {
   tray.setContextMenu(contextMenu)
 }
 
-function handleDataSDK(e, values) {
-  sqlite.insertDetail(db, values)
-}
+function handleDataSDK(e, values) { insertDetail(db, 1, values) }

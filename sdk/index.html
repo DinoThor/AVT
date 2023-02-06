@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <script src="https://sdk.morphcast.com/mphtools/v1.0/mphtools.js"></script>
+    <script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js"></script>
+    <script>
+        const tempValues = {
+            'arousal': [],
+            'valence': []
+        }
+
+        var age;
+        var gender;
+        var emotion;
+
+        const initSDK = new Promise((res) => {
+            res(CY.loader()
+                .licenseKey("0c1147cda5c900085bac32b44d10bf923c2edcd791ac")
+                .addModule(CY.modules().FACE_AGE.name)
+                .addModule(CY.modules().FACE_GENDER.name)
+                .addModule(CY.modules().FACE_EMOTION.name)
+                .addModule(CY.modules().FACE_AROUSAL_VALENCE.name, { smoothness: 0 })
+                .load()
+                .then(({ start }) => start()))
+        });
+
+        window.addEventListener(CY.modules().FACE_AGE.eventName, (evt) => {
+            age = evt.detail.output.numericAge;
+        });
+
+        window.addEventListener(CY.modules().FACE_GENDER.eventName, (evt) => {
+            gender = evt.detail.output.mostConfident;
+        });
+
+        window.addEventListener(CY.modules().FACE_EMOTION.eventName, (evt) => {
+            emotion = evt.detail.output.dominantEmotion;
+        });
+
+        window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
+            const { valence, arousal } = evt.detail.output
+            tempValues['valence'].push(valence);
+            tempValues['arousal'].push(arousal);
+        })
+
+        window.setInterval(() => {
+            avg = {
+                'a': tempValues['arousal'].reduce((a, b) => a + b, 0) / tempValues['arousal'].length,
+                'v': tempValues['valence'].reduce((a, b) => a + b, 0) / tempValues['arousal'].length
+            }
+            tempValues['arousal'].length = 0;
+            tempValues['valence'].length = 0;
+
+            if (isNaN(avg['a']) || isNaN(avg['v'])) {
+                return
+            }
+            window.electronAPI.insertData(avg)
+        }, 5000)
+    </script>
+</body>
+
+</html>
