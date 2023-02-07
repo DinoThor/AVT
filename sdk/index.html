@@ -43,6 +43,7 @@
             tempValues['arousal'].push(arousal);
         })
 
+
         window.setInterval(() => {
             avg = {
                 'a': tempValues['arousal'].reduce((a, b) => a + b, 0) / tempValues['arousal'].length,
@@ -54,7 +55,7 @@
             if (isNaN(avg['a']) || isNaN(avg['v'])) {
                 return
             }
-            window.electronAPI.insertData(avg)
+            window.dataAPI.insertData(avg)
         }, 5000)
     </script>
 </body>

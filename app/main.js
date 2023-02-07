@@ -1,10 +1,11 @@
 const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron')
-const remote = require('electron').remote
+//const remote = require('electron').remote
 const { connection, insertDetail } = require('../db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
 const { setEngine } = require('crypto');
+const { Button } = require('bootstrap');
 const file = new statik.Server(path.join(__dirname, '../sdk'), { cache: 0 })
 const filepath = './db/database.db'
 
@@ -23,10 +24,9 @@ require('http').createServer(function (request, response) {
 function createSdk() {
   sdkWindow = new BrowserWindow({
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true
+      preload: path.join(__dirname, 'preload.js')
     },
-    show: false,
+    show: false
   })
   sdkWindow.loadURL('http://localhost:9990')
 }
@@ -88,8 +88,20 @@ function createTray() {
     {
       label: 'Cerrar',
       click: () => {
-        sdkWindow.destroy()
-        app.quit()
+        // dialog.showMessageBox(w, {
+        //   type: 'question',
+        //   message: '¿Estás seguro?',
+        //   buttons: [
+        //     'Sí',
+        //     'No'
+        //   ]
+        // }).then((res) => {
+        //   if (res.response !== 0) return;
+        //   if (res.response === 0) {
+        //     sdkWindow.destroy()
+        //     app.quit()
+        //   }
+        // })
       }
     },
   ])
