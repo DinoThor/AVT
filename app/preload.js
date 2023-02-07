@@ -11,6 +11,10 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-contextBridge.exposeInMainWorld('electronAPI', {
+contextBridge.exposeInMainWorld('dataAPI', {
   insertData: (values) => ipcRenderer.send('new-data', values)
+})
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  closeSettings: () => ipcRenderer.send('close-settings')
 })
