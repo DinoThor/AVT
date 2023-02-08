@@ -1,18 +1,16 @@
 const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron')
-//const remote = require('electron').remote
 const { connection, insertDetail } = require('../db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
-const { setEngine } = require('crypto');
-const { Button } = require('bootstrap');
 const file = new statik.Server(path.join(__dirname, '../sdk'), { cache: 0 })
-const filepath = './db/database.db'
-
-const DEBUG = true
+const filepath = '../db/database.db'
 
 var db = connection(filepath)
-var settWin = null
+var windows = {
+  settWin: [null, '../www/settings.html'],
+  userWin: [null, '../www/newuser.html']
+}
 
 require('http').createServer(function (request, response) {
   request.addListener('end', function () {
@@ -31,29 +29,22 @@ function createSdk() {
   sdkWindow.loadURL('http://localhost:9990')
 }
 
-function createWindow() {
-  mainWindow = new BrowserWindow({
+
+function createWin(type) {
+  win = windows[type][0]
+  windows[type][0] = new BrowserWindow({
     width: 800, height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
-
-}
-
-function createSettings() {
-  settWin = new BrowserWindow({
-    width: 400, height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
     show: false,
     titleBarStyle: 'hidden'
   })
-  settWin.loadFile(path.join(__dirname, '../www/settings.html'))
-  settWin.on('closed', () => settWin = null)
-  settWin.webContents.on('did-finish-load', () => settWin.show())
+  windows[type][0].loadFile(path.join(__dirname, windows[type][1]))
+  windows[type][0].on('closed', () => windows[type][0] = null)
+  windows[type][0].webContents.on('did-finish-load', () => windows[type][0].show())
 }
+
 
 app.whenReady().then(() => {
   createSdk()
@@ -69,7 +60,7 @@ app.whenReady().then(() => {
 
 
 function createTray() {
-  tray = new Tray(path.join(__dirname, '../assets/tray.ico'))
+  var tray = new Tray(path.join(__dirname, '../assets/tray.ico'))
   tray.setToolTip('MorphCast VRAIN')
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -81,36 +72,33 @@ function createTray() {
     {
       label: 'Abrir ajustes',
       click: (() => {
-        if (settWin == null) createSettings()
-        else settWin.focus()
+        if (windows['settWin'][0] == null) createWin('settWin')
+        else windows['settWin'][0].focus()
+      })
+    },
+    {
+      label: 'Crear usuario',
+      click: (() => {
+        if (windows['userWin'][0] == null) createWin('userWin')
+        else windows['userWin'][0].focus()
       })
     },
     {
       label: 'Cerrar',
       click: () => {
-        // dialog.showMessageBox(w, {
-        //   type: 'question',
-        //   message: '¿Estás seguro?',
-        //   buttons: [
-        //     'Sí',
-        //     'No'
-        //   ]
-        // }).then((res) => {
-        //   if (res.response !== 0) return;
-        //   if (res.response === 0) {
-        //     sdkWindow.destroy()
-        //     app.quit()
-        //   }
-        // })
+        sdkWindow.destroy()
+        app.quit()
       }
-    },
+    }
   ])
 
   tray.setContextMenu(contextMenu)
 }
 
 function initIpc() {
-  ipcMain.on('close-settings', (e) => settWin.close())
+  ipcMain.on('close-win', (e, type) => windows[type][0].close())
+
   ipcMain.on('new-data', (e, values) => insertDetail(db, 1, values))
+  ipcMain.on('update-analisis', (e) => updateAnalisis(db, 1))
 }
 

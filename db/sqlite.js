@@ -13,6 +13,34 @@ function connection(filepath) {
     return db;
 }
 
+
+function insertDetail(db, user, values, event = null) {
+    db.run(`INSERT INTO detail(id, arousal, valence, fecha, evento)
+            VALUES($user, $arousal, $valence, $fecha, $evento)`, {
+        $user: user,
+        $arousal: values['a'],
+        $valence: values['v'],
+        $fecha: new Date().toISOString(),
+        $evento: event
+    },
+        e => {
+            if (e) return console.error(e.message)
+        });
+}
+
+
+function updateAnalisis(db, user) {
+    db.run(`UPDATE TABLE
+            SET avg_arousal = (SELECT avg(arousal) FROM detail WHERE id = $user)
+                avg_valence = (SELECT avg(valence) FROM detail WHERE id = $user)
+            WHERE
+                id = $user`, { $user: user },
+        e => {
+            if (e) return console.error(e.message)
+        })
+}
+
+
 function createTables(db) {
     db.exec(`
         CREATE TABLE IF NOT EXISTS usuario (
@@ -53,18 +81,4 @@ function createTables(db) {
     `)
 }
 
-function insertDetail(db, user, values, event = null) {
-    db.run(`INSERT INTO detail(id, arousal, valence, fecha, evento)
-            VALUES($user, $arousal, $valence, $fecha, $evento)`, {
-                $user: user,
-                $arousal: values['a'],
-                $valence: values['v'],
-                $fecha: new Date().toISOString(),
-                $evento: event
-            },
-            e => {
-                if (e) return console.log(e.message)
-            });
-}
-
-module.exports = { connection, insertDetail }
+module.exports = { connection, insertDetail, updateAnalisis }
