@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron')
-const { connection, insertDetail } = require('../db/sqlite')
+const { connection, insertDetail, createUser, updateAnalisis } = require('../db/sqlite')
 const path = require('path')
 
 const statik = require('@brettz9/node-static');
@@ -99,6 +99,7 @@ function initIpc() {
   ipcMain.on('close-win', (e, type) => windows[type][0].close())
 
   ipcMain.on('new-data', (e, values) => insertDetail(db, 1, values))
+  ipcMain.on('new-user', (e, values) => createUser(db, values))
   ipcMain.on('update-analisis', (e) => updateAnalisis(db, 1))
 }
 

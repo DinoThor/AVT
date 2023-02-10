@@ -41,6 +41,26 @@ function updateAnalisis(db, user) {
 }
 
 
+function createUser(db, values) {
+    console.log(values)
+    db.run(`INSERT INTO usuario
+            (nombre, edad, sexo, idioma_pref, email, telefono, persona_contacto)
+            VALUES ($nombre, $edad, $sexo, $idioma, $email, $tel, $cont)`, {
+        $nombre: values['floatingUser'],
+        $edad: values['floatingAge'],
+        $sexo: values['floatingGender'],
+        $idioma: null,
+        $email: values['floatingEmail'],
+        $tel: values['floatingNumber'],
+        $cont: null
+    },
+        e => {
+            if (e) return console.error(e.message)
+            else return true
+        })
+}
+
+
 function createTables(db) {
     db.exec(`
         CREATE TABLE IF NOT EXISTS usuario (
@@ -81,4 +101,4 @@ function createTables(db) {
     `)
 }
 
-module.exports = { connection, insertDetail, updateAnalisis }
+module.exports = { connection, insertDetail, updateAnalisis, createUser }

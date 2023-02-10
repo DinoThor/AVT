@@ -12,6 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 contextBridge.exposeInMainWorld('dataAPI', {
+  newUser: (values) => ipcRenderer.send('new-user', values),
   insertData: (values) => ipcRenderer.send('new-data', values),
   updateAnalisis: () => ipcRenderer.send('update-analisis')
 })
