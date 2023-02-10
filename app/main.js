@@ -63,12 +63,12 @@ function createTray() {
   var tray = new Tray(path.join(__dirname, '../assets/tray.ico'))
   tray.setToolTip('MorphCast VRAIN')
   const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Abrir ventana',
-      click: () => {
-        mainWindow.show()
-      }
-    },
+    // {
+    //   label: 'Abrir ventana',
+    //   click: () => {
+    //     mainWindow.show()
+    //   }
+    // },
     {
       label: 'Abrir ajustes',
       click: (() => {
