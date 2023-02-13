@@ -38,7 +38,8 @@
             <nav class="navbar bg-light navbar-light">
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="../assets/defaultAvatar.png" alt="" style="width: 40px; height: 40px;">
+                        <img class="rounded-circle" src="../assets/defaultAvatar.png" alt=""
+                            style="width: 40px; height: 40px;">
                     </div>
                     <div class="m-3">
                         <h6 id="username" class="mb-0">Placeholder</h6>
@@ -70,74 +71,19 @@
             </nav>
             <!-- End Topbar -->
 
-            <h2>Nuevo usuario</h2>
-            <form id="form" class="m-4">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="floatingUser" placeholder="Usuario" required>
-                    <label for="floatingUser">Nombre</label>
-                </div>
-                <div class="row g-2 mb-3">
-                    <div class="col-md">
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" name="floatingEmail"
-                                placeholder="name@example.com">
-                            <label for="floatingEmail">Correo electrónico</label>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-floating mb-3">
-                            <input type="number" class="form-control" name="floatingNumber" placeholder="123-45-67-89"
-                                required>
-                            <label for="floatingInput">Número de teléfono</label>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row g-2 mb-3">
-                    <div class="col-md">
-                        <div class="form-floating">
-                            <input type="number" class="form-control" name="floatingAge" placeholder="Edad" max="120"
-                                maxlength="3" required>
-                            <label for="floatingAge">Edad</label>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-floating">
-                            <select class="form-select" name="floatingGender" aria-label="Genero">
-                                <option value="Hombre">Hombre</option>
-                                <option value="Mujer">Mujer</option>
-                            </select>
-                            <label for="floatingGender">Género</label>
-                        </div>
-                    </div>
-
-                </div>
-                <hr />
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" value="remember-me" required>
-                        Acepto el uso continuado y en segundo plano de la cámara
-                    </label>
-                </div>
-                <button id="reg-but" class="w-auto btn btn-lg btn-primary" type="button" data-toggle="modal"
-                    data-target="modalSheet">Registrarse</button>
-            </form>
+            <div class="container">
+                <h2>Cambiar de usuario</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">Carlos</li>
+                    <li class="list-group-item">María</li>
+                </ul>
+            </div>
         </div>
         <!-- Content End -->
     </div>
 
     <script>
         document.getElementById("close-but").addEventListener('click', () => window.electronAPI.closeWin('userWin'))
-        document.getElementById("reg-but").addEventListener('click', register)
-
-        function register() {
-            var values = {}
-            var data = new FormData(document.getElementById('form'))
-            for (var pair of data.entries()) {
-                values[pair[0]] = pair[1]
-            }
-            window.dataAPI.newUser(values)
-        }
     </script>
 
     <!-- JavaScript Libraries -->
