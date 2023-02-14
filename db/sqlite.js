@@ -1,6 +1,9 @@
 const sqlite3 = require('sqlite3').verbose()
 const fs = require('fs')
 
+var config = require('../config/config.json')
+var estadoList = require('./staticValues/estado.json')
+
 function connection(filepath) {
     if (fs.existsSync(filepath)) {
         return new sqlite3.Database(filepath);
@@ -14,13 +17,14 @@ function connection(filepath) {
 }
 
 
-function insertDetail(db, user, values, event = null) {
-    db.run(`INSERT INTO detail(id, arousal, valence, fecha, evento)
-            VALUES($user, $arousal, $valence, $fecha, $evento)`, {
+function insertDetail(db, user, values, estado = estadoList['estado'][0], event = null) {
+    db.run(`INSERT INTO detail(id, arousal, valence, fecha, estado, evento)
+            VALUES($user, $arousal, $valence, $fecha, $estado, $evento)`, {
         $user: user,
         $arousal: values['a'],
         $valence: values['v'],
         $fecha: new Date().toISOString(),
+        $estado: estado,
         $evento: event
     },
         e => {
@@ -30,7 +34,7 @@ function insertDetail(db, user, values, event = null) {
 
 
 function updateAnalisis(db, user) {
-    db.run(`UPDATE TABLE
+    db.run(`UPDATE TABLE analisis
             SET avg_arousal = (SELECT avg(arousal) FROM detail WHERE id = $user)
                 avg_valence = (SELECT avg(valence) FROM detail WHERE id = $user)
             WHERE
@@ -42,7 +46,7 @@ function updateAnalisis(db, user) {
 
 
 function createUser(db, values) {
-    console.log(values)
+    let id
     db.run(`INSERT INTO usuario
             (nombre, edad, sexo, idioma_pref, email, telefono, persona_contacto)
             VALUES ($nombre, $edad, $sexo, $idioma, $email, $tel, $cont)`, {
@@ -56,8 +60,16 @@ function createUser(db, values) {
     },
         e => {
             if (e) return console.error(e.message)
-            else return true
+            else id = this.lastID
         })
+    db.run(`INSERT INTO analisis
+            (id) VALUES ($id)`, {
+        $id: id
+    },
+        e => {
+            if (e) return console.error(e.message)
+        }
+    )
 }
 
 
@@ -77,13 +89,16 @@ function createTables(db) {
         CREATE TABLE IF NOT EXISTS analisis (
             id integer PRIMARY KEY, 
             avg_arousal float, 
-            avg_valence float
+            avg_valence float,
+            varianza float,
+            dispersion float
         );
         CREATE TABLE IF NOT EXISTS detail (
             id integer NOT NULL, 
             arousal float NOT NULL, 
             valence float NOT NULL, 
             fecha datetime NOT NULL, 
+            estado text NOT NULL,
             evento integer
         );
         CREATE TABLE IF NOT EXISTS event (

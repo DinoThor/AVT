@@ -2,10 +2,10 @@ const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron')
 const { connection, insertDetail, createUser, updateAnalisis } = require('../db/sqlite')
 const path = require('path')
 
-const statik = require('@brettz9/node-static');
-const { mainModule } = require('process');
+const statik = require('node-static');
 const file = new statik.Server(path.join(__dirname, '../sdk'), { cache: 0 })
 const filepath = '../db/database.db'
+const config = require('../config/config.json')
 
 var db = connection(filepath)
 var mainWindow
@@ -30,7 +30,8 @@ function createSdk() {
 
 function createMainWin() {
   mainWindow = new BrowserWindow({
-    width:1240, height: 720,
+    width: 1240, 
+    height: 720,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
@@ -82,8 +83,9 @@ function initIpc() {
   ipcMain.on('close-win', (e) => mainWindow.hide())
 
   // Data API
-  ipcMain.on('new-data', (e, values) => insertDetail(db, 1, values))
+  ipcMain.on('new-data', (e, values) => insertDetail(db, config['devUser'], values))
   ipcMain.on('new-user', (e, values) => createUser(db, values))
-  ipcMain.on('update-analisis', (e) => updateAnalisis(db, 1))
+  ipcMain.on('update-analisis', (e) => updateAnalisis(db, config['devUser']))
 }
+
 

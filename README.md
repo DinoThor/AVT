@@ -1,6 +1,11 @@
-# electron-integration
+<div align="center">
+    <h1>AVT</h1>
+</div>
+<div align="center">
+    <h2>Arousal - Valence Tracking system</h2>
+</div>
 
-Example of successful SDK integration, starting from the [Electron Quick Start demo App](https://github.com/electron/electron-quick-start).
+An integrated desktop application for tracking and storing mood attributes by face recognision.
 
 ## To Use
 

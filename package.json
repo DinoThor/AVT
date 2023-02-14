@@ -13,14 +13,13 @@
   "author": "Aarón Raya López",
   "license": "MIT",
   "devDependencies": {
-    "@brettz9/node-static": "^0.1.1",
+    "node-static": "^0.7.11",
     "electron": "^22.1.0",
     "http-server": "^14.1.0"
   },
   "dependencies": {
+    "node-static": "^0.7.11",
     "better-sqlite3": "^8.1.0",
-    "bootstrap": "^5.3.0-alpha1",
-    "electron-winstaller": "^5.1.0",
     "nodemailer": "^6.9.1",
     "sqlite3": "^5.1.4"
   }
