@@ -1,11 +1,10 @@
 const sqlite3 = require('sqlite3').verbose()
-const fs = require('fs')
+const { existsSync } = require('fs');
 
-var config = require('../config/config.json')
-var estadoList = require('./staticValues/estado.json')
+const estadoList = require('./staticValues/estado.json');
 
 function connection(filepath) {
-    if (fs.existsSync(filepath)) {
+    if (existsSync(filepath)) {
         return new sqlite3.Database(filepath);
     } else {
         var db = new sqlite3.Database('./db/database.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -112,6 +111,12 @@ function createTables(db) {
             telefono integer,
             nombre text NOT NULL,
             parentesco text
+        );
+        CREATE TABLE IF NOT EXISTS graphs (
+            id integer PRIMARY KEY,
+            titulo text NOT NULL,
+            descripcion text,
+            graph binary NOT NULL
         );
     `)
 }

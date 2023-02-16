@@ -13,14 +13,15 @@
   "author": "Aarón Raya López",
   "license": "MIT",
   "devDependencies": {
-    "node-static": "^0.7.11",
     "electron": "^22.1.0",
-    "http-server": "^14.1.0"
+    "http-server": "^14.1.0",
+    "node-static": "^0.7.11"
   },
   "dependencies": {
-    "node-static": "^0.7.11",
     "better-sqlite3": "^8.1.0",
+    "node-static": "^0.7.11",
     "nodemailer": "^6.9.1",
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.4",
+    "webcamjs": "^1.0.26"
   }
 }

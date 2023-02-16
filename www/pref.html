@@ -38,21 +38,20 @@
             <nav class="navbar bg-light navbar-light">
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="../assets/defaultAvatar.png" alt=""
-                            style="width: 40px; height: 40px;">
+                        <img id="useravatar" class="rounded-circle" src="../assets/defaultAvatar.png" alt="" style="width: 40px; height: 40px;">
                     </div>
                     <div class="m-3">
                         <h6 id="username" class="mb-0">dev</h6>
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i
+                    <a href="index.html" class="nav-item nav-link active"><i
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                                 class="fa fa-cog me-2"></i>Ajustes</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="" class="dropdown-item">Preferencias</a>
+                            <a href="pref.html" class="dropdown-item">Preferencias</a>
                             <a href="changeuser.html" class="dropdown-item">Cambiar usuario</a>
                             <a href="newuser.html" class="dropdown-item">Registrar usuario</a>
                         </div>
@@ -63,27 +62,20 @@
         <!-- Sidebar End -->
 
         <!-- Content Start -->
-        <div class="content text-center">
-            <!-- Topbar -->
+        <div class="content">
             <nav id="title-bar" class="navbar">
                 <div class="ms-auto m-3">
                     <button type="button" id="close-but" class="btn-close"></button>
                 </div>
             </nav>
-            <!-- End Topbar -->
 
-            <div class="container">
-                <h2>Cambiar de usuario</h2>
-                <ul class="list-group">
-                    <li class="list-group-item">Carlos</li>
-                    <li class="list-group-item">María</li>
-                </ul>
-            </div>
+            <h1>Preferencias</h1>
         </div>
         <!-- Content End -->
     </div>
 
     <script src="js/title-bar.js"></script>
+    <script src="js/main.js"></script>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

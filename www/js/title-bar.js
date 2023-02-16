@@ -1,4 +1,3 @@
-
 document.getElementById("close-but").addEventListener('click', () => {
-    window.electronAPI.closeWin('userWin')
+    window.electronAPI.closeWin()
 })
