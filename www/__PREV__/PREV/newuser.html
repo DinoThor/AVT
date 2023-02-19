@@ -5,9 +5,6 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
-
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,10 +14,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
-
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -29,6 +22,8 @@
 
     <!-- Draggable Topbar -->
     <link href="css/title-bar.css" rel="stylesheet">
+
+
 </head>
 
 <body>
@@ -38,20 +33,21 @@
             <nav class="navbar bg-light navbar-light">
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="../assets/defaultAvatar.png" alt=""
+                        <img class="rounded-circle" src="../assets/avatar1.png" alt=""
                             style="width: 40px; height: 40px;">
                     </div>
                     <div class="m-3">
-                        <h6 id="username" class="mb-0">Placeholder</h6>
+                        <h6 id="username" class="mb-0">dev</h6>
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i
+                    <a href="index.html" class="nav-item nav-link active"><i
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                                 class="fa fa-cog me-2"></i>Ajustes</a>
                         <div class="dropdown-menu bg-transparent border-0">
+                            <a href="pref.html" class="dropdown-item">Preferencias</a>
                             <a href="changeuser.html" class="dropdown-item">Cambiar usuario</a>
                             <a href="newuser.html" class="dropdown-item">Registrar usuario</a>
                         </div>
@@ -87,8 +83,7 @@
                     </div>
                     <div class="col-md">
                         <div class="form-floating mb-3">
-                            <input type="number" class="form-control" name="floatingNumber" placeholder="123-45-67-89"
-                                required>
+                            <input type="tel" class="form-control" name="floatingNumber" pattern="[0-9]{9}" required>
                             <label for="floatingInput">Número de teléfono</label>
                         </div>
                     </div>
@@ -97,8 +92,8 @@
                 <div class="row g-2">
                     <div class="col-md">
                         <div class="form-floating mb-3">
-                            <input type="number" class="form-control" name="floatingAge" placeholder="Edad" max="120"
-                                maxlength="3" required>
+                            <input type="number" class="form-control" name="floatingAge" placeholder="Edad"
+                                pattern="[0-9]{3}" required>
                             <label for="floatingAge">Edad</label>
                         </div>
                         <div class="form-floating mb-3">
@@ -109,52 +104,124 @@
                             <label for="floatingGender">Género</label>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <a href="#"><img src="../assets/male-avatar.png" class="rounded-circle" style="width: 150px;"
-                                alt="Avatar" /></a>
+                    <!-- Avatar -->
+                    <div class="col-md ms-5 me-5">
+                        <img class="w-25 me-5 rounded-circle" src="../assets/avatar1.png">
                         <button id="avt-but" class="w-10 m-2 btn btn-lg btn-secondary" type="button">Tomar foto</button>
                     </div>
 
-                </div>
-                <hr />
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" value="remember-me" required>
-                        Acepto el uso continuado y en segundo plano de la cámara
-                    </label>
-                </div>
-                <button id="reg-but" class="w-auto btn btn-lg btn-primary" type="button" data-toggle="modal"
-                    data-target="modalSheet">Registrarse</button>
+                    <hr />
+
+                    <h5>Persona de contacto</h5>
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="floatingUser" placeholder="Usuario"
+                                    required>
+                                <label for="floatingUser">Nombre</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="col-md">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" name="floatingEmail"
+                                        placeholder="name@example.com">
+                                    <label for="floatingEmail">Correo electrónico</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md">
+                            <div class="form-floating mb-3">
+                                <input type="tel" class="form-control" name="floatingNumber" pattern="[0-9]{9}"
+                                    required>
+                                <label for="floatingInput">Número de teléfono</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-floating mb-3">
+                                <select class="form-select" name="floatingGender" aria-label="Genero">
+                                    <option value="Hombre">Hijo/a</option>
+                                    <option value="Mujer">Nieto/a</option>
+                                    <option value="Mujer">Sobrino/a</option>
+                                    <option value="Mujer">Hermano/a</option>
+                                    <option value="Mujer">Primo/a</option>
+                                    <option value="Mujer">Padre/madre</option>
+                                </select>
+                                <label for="floatingGender">Parentesco</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr />
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" value="remember-me" required>
+                            Acepto el uso continuado y en segundo plano de la cámara
+                        </label>
+                    </div>
+
+                    <button id="reg-but" class="w-auto btn btn-lg btn-primary" type="button" data-toggle="modal"
+                        data-target="modalSheet">Registrarse</button>
             </form>
+
+            <!-- Modal usuario creado -->
+            <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="text-center m-3">
+                            <h3 class="modal-title text-center id=" exampleModalLabel">Usuario creado</h3>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Foto -->
+            <div class="modal fade" id="photo" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div id="photo-frame"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Patata!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
         <!-- Content End -->
     </div>
 
     <script>
-        document.getElementById("reg-but").addEventListener('click', register)
+        //var WebCamera = require("webcamjs");
 
-        function register() {
+        document.getElementById("reg-but").addEventListener('click', () => {
             var values = {}
             var data = new FormData(document.getElementById('form'))
             for (var pair of data.entries()) {
                 values[pair[0]] = pair[1]
             }
             window.dataAPI.newUser(values)
-        }
+            $('#confirm').modal('show')
+        })
+
+        document.getElementById("avt-but").addEventListener('click', function () {
+            //WebCamera.attach('#photo-frame');
+            $('#photo').modal('show')
+        });
     </script>
 
     <script src="js/title-bar.js"></script>
+    <script src="js/jquery-3.6.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 </body>
 
 </html>

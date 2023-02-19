@@ -6,8 +6,11 @@
     <script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js"></script>
     <script>
         const tempValues = {
-            'arousal': [],
-            'valence': []
+            'arousal':  [],
+            'valence':  [],
+            'age':      [],
+            'gender':   [],
+            'emotion':  []
         }
 
         var age;
@@ -26,15 +29,15 @@
         });
 
         window.addEventListener(CY.modules().FACE_AGE.eventName, (evt) => {
-            age = evt.detail.output.numericAge;
+            tempValues['age'].push(evt.detail.output.numericAge);
         });
 
         window.addEventListener(CY.modules().FACE_GENDER.eventName, (evt) => {
-            gender = evt.detail.output.mostConfident;
+            tempValues['gender'].push(evt.detail.output.mostConfident);
         });
 
         window.addEventListener(CY.modules().FACE_EMOTION.eventName, (evt) => {
-            emotion = evt.detail.output.dominantEmotion;
+            tempValues['emotion'].push(.detail.output.dominantEmotion);
         });
 
         window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
@@ -47,7 +50,8 @@
         window.setInterval(() => {
             avg = {
                 'a': tempValues['arousal'].reduce((a, b) => a + b, 0) / tempValues['arousal'].length,
-                'v': tempValues['valence'].reduce((a, b) => a + b, 0) / tempValues['arousal'].length
+                'v': tempValues['valence'].reduce((a, b) => a + b, 0) / tempValues['arousal'].length,
+                'e': tempValues['age'].reduce((a, b) => a + b, 0) / tempValues['age'].length,
             }
             tempValues['arousal'].length = 0;
             tempValues['valence'].length = 0;
