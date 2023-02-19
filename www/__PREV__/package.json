@@ -1,0 +1,42 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "description": "Bla bla",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "repository": "https://github.com/DinoThor/AVT",
+  "keywords": [
+    "React"
+  ],
+  "author": "Aarón Raya López",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "bootstrap": "^5.2.3",
+    "font-awesome": "^4.7.0",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.2",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.7.1",
+    "react-intl": "^6.2.8",
+    "react-router-dom": "^6.8.1",
+    "react-scripts": "^5.0.1",
+    "rsuite": "^5.27.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
