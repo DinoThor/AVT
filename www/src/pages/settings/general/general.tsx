@@ -11,8 +11,7 @@ import {
   MaskedInput,
   DatePicker
 } from 'rsuite';
-
-const SignIn = () => {
+const GeneralSettings = () => {
   return (
     <Stack
       justifyContent="center"
@@ -23,9 +22,14 @@ const SignIn = () => {
       }}
     >
       <Panel
-        header={<h3>Nuevo usuario</h3>}
+        header={
+          <>
+            <h3>Parámetros</h3>
+            <h5>General</h5>
+          </>
+        }
         bordered
-        style={{ background: '#fff', width: 400 }}
+        style={{ background: '#fff', width: 600 }}
       >
 
         <Divider />
@@ -96,6 +100,5 @@ const SignIn = () => {
       </Panel>
     </Stack>
   );
-};
-
-export default SignIn;
+}
+export default GeneralSettings;
