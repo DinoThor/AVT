@@ -35,17 +35,17 @@ function createMainWin() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
-    show: false,
+    //show: false,
     titleBarStyle: 'hidden'
   })
   mainWindow.on('closed', () => mainWindow = null)
-  mainWindow.loadFile(path.join(__dirname, '../www/index.html'))
+  mainWindow.loadFile(path.join(__dirname, '../www/assets/index.html'))
 }
 
 
 app.whenReady().then(() => {
   createSdk()
-  createTray()
+  //createTray()
   initIpc()
   createMainWin()
 
@@ -59,7 +59,7 @@ app.whenReady().then(() => {
 
 function createTray() {
   var tray = new Tray(path.join(__dirname, '../assets/tray.ico'))
-  tray.setToolTip('MorphCast VRAIN')
+  //tray.setToolTip('MorphCast VRAIN')
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Abrir',

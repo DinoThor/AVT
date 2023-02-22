@@ -33,6 +33,7 @@ function insertDetail(db, user, values, estado = estadoList['estado'][0], event 
 
 
 function updateAnalisis(db, user) {
+    // TODO: varianza y dispersión
     db.run(`UPDATE TABLE analisis
             SET avg_arousal = (SELECT avg(arousal) FROM detail WHERE id = $user)
                 avg_valence = (SELECT avg(valence) FROM detail WHERE id = $user)
@@ -49,12 +50,12 @@ function createUser(db, values) {
     db.run(`INSERT INTO usuario
             (nombre, edad, sexo, idioma_pref, email, telefono, persona_contacto)
             VALUES ($nombre, $edad, $sexo, $idioma, $email, $tel, $cont)`, {
-        $nombre: values['floatingUser'],
-        $edad: values['floatingAge'],
-        $sexo: values['floatingGender'],
-        $idioma: null,
-        $email: values['floatingEmail'],
-        $tel: values['floatingNumber'],
+        $nombre: values['user'],
+        $edad: values['age'],
+        $sexo: values['gender'],
+        $idioma: valeus['lang'],
+        $email: values['email'],
+        $tel: values['phone'],
         $cont: null
     },
         e => {
@@ -85,26 +86,6 @@ function createTables(db) {
             persona_contacto integer
             config text
         );
-        CREATE TABLE IF NOT EXISTS analisis (
-            id integer PRIMARY KEY, 
-            avg_arousal float, 
-            avg_valence float,
-            varianza float,
-            dispersion float
-        );
-        CREATE TABLE IF NOT EXISTS detail (
-            id integer NOT NULL, 
-            arousal float NOT NULL, 
-            valence float NOT NULL, 
-            fecha datetime NOT NULL, 
-            estado text NOT NULL,
-            evento integer
-        );
-        CREATE TABLE IF NOT EXISTS event (
-            event_id integet PRIMARY KEY, 
-            accion integer NOT NULL, 
-            comentarios text NOT NULL
-        );
         CREATE TABLE IF NOT EXISTS persona_contacto (
             id integer PRIMARY KEY,
             email text NOT NULL,
@@ -112,11 +93,47 @@ function createTables(db) {
             nombre text NOT NULL,
             parentesco text
         );
+
+        CREATE TABLE IF NOT EXISTS estadisticas (
+            id integer PRIMARY KEY, 
+            avg_arousal float, 
+            avg_valence float,
+            varianza float,
+            dispersion float
+        );
         CREATE TABLE IF NOT EXISTS graphs (
             id integer PRIMARY KEY,
             titulo text NOT NULL,
             descripcion text,
             graph binary NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS sesion (
+            id integer PRIMARY KEY,
+            id_usuario integer NOT NULL,
+            id_estado integer NOT NULL,
+            id_situacion integer NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS AV (
+            id integer NOT NULL, 
+            arousal float NOT NULL, 
+            valence float NOT NULL, 
+            fecha datetime NOT NULL, 
+            estado text NOT NULL,
+        );
+        CREATE TABLE IF NOT EXISTS evento (
+            id integet PRIMARY KEY, 
+            accion integer NOT NULL, 
+            comentarios text NOT NULL
+        );
+        
+        CREATE TABLE IF NOT EXISTS estado (
+            id integer PRIMARY KEY,
+            name text NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS situacion (
+            id integer PRIMARY KEY,
+            name text NOT NULL
         );
     `)
 }

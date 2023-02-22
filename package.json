@@ -4,10 +4,10 @@
   "description": "Bla bla",
   "main": "app/main.js",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "electron .",
     "build": "react-scripts build"
   },
-  "repository": "https://github.com/DinoThor/MorphCast_GUI",
+  "repository": "https://github.com/DinoThor/AVT",
   "keywords": [
     "Electron"
   ],
