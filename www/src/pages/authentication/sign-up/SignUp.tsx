@@ -9,10 +9,16 @@ import {
   Checkbox,
   Divider,
   MaskedInput,
-  DatePicker
+  DatePicker,
+  InputPicker,
+  Modal
 } from 'rsuite';
 
 const SignIn = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  
   return (
     <Stack
       justifyContent="center"
@@ -80,7 +86,13 @@ const SignIn = () => {
 
           <Form.Group>
             <Form.ControlLabel>Género</Form.ControlLabel>
-            <Form.Control name="confirm-password" type="password" />
+            <Form.Control
+              name="gender"
+              placeholder='Seleccione'
+              accepter={InputPicker}
+              data={['Hombre', 'Mujer'].map(i => ({ label: i, value: i }))}
+              block
+            />
           </Form.Group>
 
           <Form.Group>
@@ -90,10 +102,28 @@ const SignIn = () => {
           </Form.Group>
 
           <Form.Group>
-            <Button appearance="primary" block>Registrarse</Button>
+            <Button 
+            appearance="primary" 
+            onClick={handleOpen}
+            block>Registrarse</Button>
           </Form.Group>
         </Form>
       </Panel>
+
+      <Modal open={open} onClose={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Usuario creado</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>El usuario ha sido creado correctamente</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleClose} appearance="primary">
+            Continuar
+          </Button>
+
+        </Modal.Footer>
+      </Modal>
     </Stack>
   );
 };

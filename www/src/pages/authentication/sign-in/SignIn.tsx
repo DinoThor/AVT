@@ -1,13 +1,12 @@
 import React from 'react';
-import { Form, Button, Panel, IconButton, Stack, Divider } from 'rsuite';
-import { Link } from 'react-router-dom';
-import GithubIcon from '@rsuite/icons/legacy/Github';
-import FacebookIcon from '@rsuite/icons/legacy/Facebook';
-import GoogleIcon from '@rsuite/icons/legacy/Google';
-import WechatIcon from '@rsuite/icons/legacy/Wechat';
-import Brand from '@/components/Brand';
+import { Panel, IconButton, Stack, Divider, Modal, Button } from 'rsuite';
+import Avatar from 'rsuite/Avatar';
 
 const SignUp = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <Stack
       justifyContent="center"
@@ -17,39 +16,64 @@ const SignUp = () => {
         height: '100vh'
       }}
     >
-      <Brand style={{ marginBottom: 10 }} />
+      <Panel
+        bordered
+        style={{ background: '#fff', width: 500 }}
+        header={<h3>Cambiar de usuario</h3>}
+      >
+        <Divider />
 
-      <Panel bordered style={{ background: '#fff', width: 400 }} header={<h3>Sign In</h3>}>
-        <p style={{ marginBottom: 10 }}>
-          <span className="text-muted">New Here? </span>{' '}
-          <Link to="/sign-up"> Create an Account</Link>
-        </p>
+        <IconButton
+          appearance='subtle'
+          icon={<Avatar size='lg' src="https://avatars.githubusercontent.com/u/12592949" />}
+          onClick={handleOpen}
+          block>
+          <h3>Carlos</h3>
+        </IconButton>
+        <IconButton
+          appearance='subtle'
+          icon={<Avatar size='lg' src="https://images.generated.photos/xXpm8H5F4Lyye9-Hqr9lsJ3N_h_OVHm4a41ejvlQtag/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/ODM1MjAwLmpwZw.jpg" />}
+          onClick={handleOpen}
+          block>
+          <h3>Julio</h3>
+        </IconButton>
+        <IconButton
+          appearance='subtle'
+          icon={<Avatar size='lg' src="https://static.vecteezy.com/system/resources/thumbnails/001/546/003/small/indian-woman-s-face-avatar-free-vector.jpg" />}
+          onClick={handleOpen}
+          block>
+          <h3>María</h3>
+        </IconButton>
+        <IconButton
+          appearance='subtle'
+          icon={<Avatar size='lg' src="https://pbs.twimg.com/profile_images/606488041943736321/03xM7ged_400x400.jpg" />}
+          onClick={handleOpen}
+          block>
+          <h3>José</h3>
+        </IconButton>
+        <IconButton
+          appearance='subtle'
+          icon={<Avatar size='lg' src="https://img.freepik.com/premium-vector/young-black-man-face-with-beard-male-portrait-avatar-flat-style-front-view_497399-251.jpg?w=360" />}
+          onClick={handleOpen}
+          block>
+          <h3>Pedro</h3>
+        </IconButton>
 
-        <Form fluid>
-          <Form.Group>
-            <Form.ControlLabel>Username or email address</Form.ControlLabel>
-            <Form.Control name="name" />
-          </Form.Group>
-          <Form.Group>
-            <Form.ControlLabel>
-              <span>Password</span>
-              <a style={{ float: 'right' }}>Forgot password?</a>
-            </Form.ControlLabel>
-            <Form.Control name="name" type="password" />
-          </Form.Group>
-          <Form.Group>
-            <Stack spacing={6} divider={<Divider vertical />}>
-              <Button appearance="primary">Sign in</Button>
-              <Stack spacing={6}>
-                <IconButton icon={<WechatIcon />} appearance="subtle" />
-                <IconButton icon={<GithubIcon />} appearance="subtle" />
-                <IconButton icon={<FacebookIcon />} appearance="subtle" />
-                <IconButton icon={<GoogleIcon />} appearance="subtle" />
-              </Stack>
-            </Stack>
-          </Form.Group>
-        </Form>
       </Panel>
+
+      <Modal open={open} onClose={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Usuario cambiado</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>El usuario ha sido cambiado. ¡Bienvenido!</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleClose} appearance="primary">
+            Ok
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Stack>
   );
 };
