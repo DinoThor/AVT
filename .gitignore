@@ -46,3 +46,6 @@ dist
 assets
 *.swp
 
+.expo/
+.expo-shared/
+

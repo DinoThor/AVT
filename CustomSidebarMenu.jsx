@@ -5,21 +5,44 @@ import {
   Image,
   Platform,
   StatusBar,
-  Text
+  Text,
+  View
 } from 'react-native';
+
+//import { Button } from 'raect-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 export default function CustomSidebarMenu(props) {
-  const BASE_PATH =
-    'https://raw.githubusercontent.com/AboutReact/sampleresource/master/';
-  const proileImage = 'react_logo.png';
-
   return (
     <SafeAreaView style={styles.androidSafeView}>
+
+      <Avatar />
+
+      <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+
+      <TouchableOpacity>
+        <BottomDrawer/>
+      </TouchableOpacity>
+
+    </SafeAreaView>
+  );
+};
+
+
+function Avatar(props) {
+  // TODO: Dynamic name/picutre from user acount
+  return (
+    <View>
       <Image
         source={require('./assets/avatar.jpg')}
         style={styles.sideMenuProfileIcon}
@@ -27,14 +50,27 @@ export default function CustomSidebarMenu(props) {
       <Text style={styles.userName}>
         Eustaquio
       </Text>
-
-      <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} />
-      </DrawerContentScrollView>
-
-    </SafeAreaView>
+    </View>
   );
-};
+}
+
+function BottomDrawer() {
+  return (
+    <View>  
+      {/* <Button 
+        icon={
+          <Icon 
+            name="logout"
+            size={15}
+            color="black"
+          />
+        }
+        text="Cerrar aplicación"
+      /> */}
+    </View>
+  );
+}
+
 
 const styles = StyleSheet.create({
   androidSafeView: {
