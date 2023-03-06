@@ -1,4 +1,3 @@
-import { Stack } from '@react-native-material/core';
 import {
   StyleSheet,
   Button,
@@ -7,61 +6,44 @@ import {
   Dimensions,
   StatusBar
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { StretchOutY } from 'react-native-reanimated';
 
 import Carousel from 'react-native-reanimated-carousel';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import StatePicker from '../../statePicker/StatePicker';
+import MoodPicker from '../../statePicker/MoodPicker'
 
-export default function Home({ navigation }) {
-  return (
-    <SafeAreaView style={styles.home}>
-      <View style={{
-        flex: 1,
-        borderWidth: 1,
-        margin: 10
-      }}>
-
-      </View>
-      <StatusPicker />
-
-    </SafeAreaView>
-  );
-};
-
-
+const Stack = createStackNavigator();
 const screenHeight = Dimensions.get('screen').height;
 const windowHeight = Dimensions.get('window').height;
 const navbarHeight = screenHeight - windowHeight + StatusBar.currentHeight;
 
 
-function StatusPicker(props) {
+export default function Home({ navigation }) {
   return (
-    <View style={{ flex: 2 }}>
-      <Text style={{ alignSelf: 'center', marginVertical: 10, fontWeight: 'bold' }}>
-        ¿Qué vas a hacer ahora?
-      </Text>
-      <Carousel
-        loop
-        width={Dimensions.get('window').width}
-        data={[...new Array(3).keys()]}
-        renderItem={({ index }) => (
-          <View style={styles.carousel}>
-            <StatePicker/>
-          </View>
-        )}
+    <Stack.Navigator>
+      <Stack.Screen
+        name="¿Qué va a hacer ahora?"
+        component={Testbut}
+      />
+      <Stack.Screen
+        name="¿Y como se siente?"
+        component={MoodPicker}
+      />
+    </Stack.Navigator>
+  );
+};
+
+
+function Testbut({ navigation }) {
+  return (
+    <View>
+      <Button
+        title='Test'
+        onPress={() => navigation.navigate('¿Y como se siente?')}
       />
     </View>
   );
 }
-
-
-// const Item = ({title}) => (
-//   <View style={styles.item}>
-//     <Text style={styles.title}>{title}</Text>
-//   </View>
-// );
 
 
 const styles = StyleSheet.create({
@@ -90,7 +72,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignSelf: 'stretch'
-
-    //padding: 10,
+  },
+  label: {
+    alignSelf: 'center',
+    marginVertical: 10,
+    fontWeight: 'bold'
   }
 });

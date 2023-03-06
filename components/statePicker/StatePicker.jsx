@@ -1,45 +1,25 @@
 import React, { useState } from 'react'
 import { ButtonGroup } from '@rneui/themed'
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
+import { Col, Row, Grid } from "react-native-easy-grid";
 
 export default () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   return (
-    <>
-      <ButtonGroup
-        buttons={['Tv', 'MIs muertos', 'GROUP']}
-        selectedIndex={selectedIndex}
-        onPress={(value) => {
-          setSelectedIndex(value);
-        }}
-        containerStyle={{ marginBottom: 20 }}
-      />
-      <ButtonGroup
-        buttons={['Tv', 'MIs muertos', 'GROUP']}
-        selectedIndex={selectedIndex}
-        onPress={(value) => {
-          setSelectedIndex(value);
-        }}
-        containerStyle={{ marginBottom: 20 }}
-      />
-      <ButtonGroup
-        buttons={['Tv', 'MIs muertos', 'GROUP']}
-        selectedIndex={selectedIndex}
-        onPress={(value) => {
-          setSelectedIndex(value);
-        }}
-        containerStyle={{ marginBottom: 20 }}
-      />
-    </>
+    <Grid>
+      <Row><Text>Text</Text></Row>
+      <Row><Text>Text</Text></Row>
+    </Grid>
+
   )
 }
 
-const styles = StyleSheet.create({
-  subHeader: {
-    backgroundColor: "#2089dc",
-    color: "white",
-    textAlign: "center",
-    paddingVertical: 5,
-    marginBottom: 10
-  }
-})
+// const styles = StyleSheet.create({
+//   subHeader: {
+//     backgroundColor: "#2089dc",
+//     color: "white",
+//     textAlign: "center",
+//     paddingVertical: 5,
+//     marginBottom: 10
+//   }
+// })

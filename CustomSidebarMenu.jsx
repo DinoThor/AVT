@@ -9,31 +9,19 @@ import {
   View
 } from 'react-native';
 
-//import { Button } from 'raect-native-elements'
-import Icon from 'react-native-vector-icons/FontAwesome';
-
-
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default function CustomSidebarMenu(props) {
   return (
     <SafeAreaView style={styles.androidSafeView}>
-
       <Avatar />
-
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-
-      <TouchableOpacity>
-        <BottomDrawer/>
-      </TouchableOpacity>
-
     </SafeAreaView>
   );
 };
@@ -50,23 +38,6 @@ function Avatar(props) {
       <Text style={styles.userName}>
         Eustaquio
       </Text>
-    </View>
-  );
-}
-
-function BottomDrawer() {
-  return (
-    <View>  
-      {/* <Button 
-        icon={
-          <Icon 
-            name="logout"
-            size={15}
-            color="black"
-          />
-        }
-        text="Cerrar aplicación"
-      /> */}
     </View>
   );
 }
