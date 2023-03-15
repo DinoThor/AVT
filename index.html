@@ -11,14 +11,12 @@
   <script>
     CY.loader()
       .licenseKey("0c1147cda5c900085bac32b44d10bf923c2edcd791ac")
-      .addModule(CY.modules().FACE_GENDER.name)
-      .addModule(CY.modules().FACE_EMOTION.name)
       .addModule(CY.modules().FACE_AROUSAL_VALENCE.name)
       .load()
       .then(({ start, stop }) => start());
 
-    window.addEventListener(CY.modules().EVENT_BARRIER.eventName, (evt) => {
-      window.ReactNativeWebView.postMessage(evt.detail)
+    window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
+      window.ReactNativeWebView.postMessage(evt.detail.output)
     });
   </script>
 </body>
