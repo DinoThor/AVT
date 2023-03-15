@@ -17,8 +17,8 @@
       .load()
       .then(({ start, stop }) => start());
 
-    window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
-      window.ReactNativeWebView.postMessage(JSON.stringify(evt.detail))
+    window.addEventListener(CY.modules().EVENT_BARRIER.eventName, (evt) => {
+      window.ReactNativeWebView.postMessage(JSON.stringify(evt.detail.output))
     });
   </script>
 </body>
