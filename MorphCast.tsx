@@ -1,14 +1,8 @@
 import React from 'react';
 import WebView from 'react-native-webview';
 
-import {
-  SafeAreaView, Text,
-} from 'react-native';
-
-
-function App(): JSX.Element {
+function MorphCast(): JSX.Element {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <WebView
         source={{
           uri: "https://dinothor.github.io/AVT/"
@@ -18,8 +12,7 @@ function App(): JSX.Element {
           console.log(rawData)
         }}
       />
-    </SafeAreaView>
   );
 }
 
-export default App;
+export default MorphCast;
