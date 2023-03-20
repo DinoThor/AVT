@@ -12,11 +12,8 @@ import MoodPicker from '../../statePicker/MoodPicker'
 import ContextPicker from '../../statePicker/ContextPicker';
 
 const Stack = createStackNavigator();
-const screenHeight = Dimensions.get('screen').height;
-const windowHeight = Dimensions.get('window').height;
-const navbarHeight = screenHeight - windowHeight + StatusBar.currentHeight;
 
-function Home({ navigation }) {
+function Home() {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -27,16 +24,18 @@ function Home({ navigation }) {
           headerStyle: {
             backgroundColor: '#FFFFFF'
           },
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
+          headerTitleAlign: 'center'
         }}
       />
       <Stack.Screen
         name="MoodPicker"
         component={MoodPicker}
         options={{
-          title: '¿Y cómo le hace sentir?'
+          title: '¿Y cómo le hace sentir?',
+          headerStyle: {
+            backgroundColor: '#FFFFFF'
+          },
+          headerTitleAlign: 'center'
         }}
       />
     </Stack.Navigator>
