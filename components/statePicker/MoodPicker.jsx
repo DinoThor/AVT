@@ -5,7 +5,9 @@ import Happy from '../statePicker/faces/Happy'
 import Neutral from './faces/Neutral';
 import Sad from './faces/Sad';
 
-const MoodPicker = () => {
+const MoodPicker = ({ route }) => {
+  const { itemId } = route.params;
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.buttons}>
