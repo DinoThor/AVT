@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import 'react-native-gesture-handler';
 
@@ -10,11 +10,25 @@ import CustomSidebarMenu from './components/sidebar/CustomSidebarMenu';
 import Home from './components/screens/home/Home';
 import Notifications from './components/screens/notifications/Notifications';
 import Settings from './components/screens/notifications/Notifications';
+
 import MorphCast from './components/morphcast/MorphCast';
+
+var RNFS = require('react-native-fs');
 
 const Drawer = createDrawerNavigator();
 
 function App() {
+
+  const basePath = RNFS.DocumentDirectoryPath
+  // RNFS.exists(basePath + "/userdata/database.db")
+  //   .then((exists) => {
+  //     if (!exists) {
+  //       RNFS.copyFile(basePath + "/database/default/database.db", basePath + "/userdata/")
+  //     }
+  useEffect(() => {
+    RNFS.exists(basePath + "/database/").then((exists) => console.log(exists))
+  })
+
   return (
     <NavigationContainer>
       <Drawer.Navigator
@@ -48,7 +62,7 @@ function App() {
           component={Settings}
         />
       </Drawer.Navigator>
-      <MorphCast/>
+      <MorphCast />
     </NavigationContainer>
   );
 }

@@ -26,6 +26,7 @@ function Home() {
           },
           headerTitleAlign: 'center'
         }}
+        styles={styles.home}
       />
       <Stack.Screen
         name="MoodPicker"
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   home: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    //paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
   },
   sideMenuProfileIcon: {
     resizeMode: 'center',

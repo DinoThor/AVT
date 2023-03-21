@@ -6,3 +6,17 @@ export const getDBConnection = async () => {
     location: 'default'
   })
 }
+
+export const insert = async (db, table, item) => {
+  db.transaction
+}
+
+export const select = (db, table, query) => {
+
+}
+
+export const update = async (db, table, item) => {
+
+}
+
+
