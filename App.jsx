@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import 'react-native-gesture-handler';
 
@@ -13,21 +13,26 @@ import Settings from './components/screens/notifications/Notifications';
 
 import MorphCast from './components/morphcast/MorphCast';
 
-var RNFS = require('react-native-fs');
+import useGetOnboardingStatus from './utils/useGetOnboardingStatus';
+
+//var RNFS = require('react-native-fs');
 
 const Drawer = createDrawerNavigator();
 
 function App() {
+  // const [user, setUser] = useState(null);
 
-  const basePath = RNFS.DocumentDirectoryPath
-  // RNFS.exists(basePath + "/userdata/database.db")
-  //   .then((exists) => {
-  //     if (!exists) {
-  //       RNFS.copyFile(basePath + "/database/default/database.db", basePath + "/userdata/")
-  //     }
-  useEffect(() => {
-    RNFS.exists(basePath + "/database/").then((exists) => console.log(exists))
-  })
+  // const { isFirstLaunch, isLoading } = useGetOnboardingStatus();
+
+  // const basePath = RNFS.DocumentDirectoryPath;
+  // useEffect(() => {
+  //   RNFS.exists(basePath + "/userdata/database.db")
+  //     .then((exists) => {
+  //       if (!exists) {
+  //         RNFS.copyFile(basePath + "/database/default/database.db", basePath + "/userdata/")
+  //       }
+  //     })
+  // })
 
   return (
     <NavigationContainer>
