@@ -165,6 +165,13 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    implementation project(':react-native-sqlite-storage')
+    
+    implementation fileTree(dir: "libs", include: ["*.jar"]) //noinspection GradleDynamicVersion 
+    implementation "com.facebook.react:react-native:+" // From node_modules
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

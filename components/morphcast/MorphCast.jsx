@@ -11,12 +11,16 @@ function MorphCast() {
           uri: "https://dinothor.github.io/AVT/"
         }}
         onMessage={(e) => {
-          let rawData = JSON.parse(e.nativeEvent.data)
-          console.log(rawData)
+          treatData(JSON.parse(e.nativeEvent.data))
         }}
       />
     </SafeAreaView>
   );
+}
+
+
+function treatData(data) {
+
 }
 
 export default MorphCast;

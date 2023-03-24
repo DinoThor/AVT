@@ -6,50 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { openDatabase } from 'react-native-sqlite-storage';
-import SQLite from 'react-native-sqlite-storage';
-
-SQLite.enablePromise(true);
-
-var db = openDatabase({ name: 'userDataBase.db', createFromLocation: 1 },
-  () => console.log("Succes"),
-  () => console.log("Failrue")
-);
-
-const DATA = [ //HARDCODED
-  {
-    id: '1',
-    title: '📺 Ver la televisión',
-  },
-  {
-    id: '2',
-    title: '👨‍👩‍👧‍👦 Visita familiar',
-  },
-  {
-    id: '3',
-    title: '📖 Leer',
-  },
-  {
-    id: 'asdf',
-    title: '🚶 Pasear'
-  },
-  {
-    id: '4',
-    title: '📺 Ver la televisión',
-  },
-  {
-    id: '5',
-    title: '👨‍👩‍👧‍👦 Visita familiar',
-  },
-  {
-    id: '6',
-    title: '📖 Leer',
-  },
-  {
-    id: '7',
-    title: '🚶 Pasear'
-  }
-];
+import { getContext } from '../utils/dataService';
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity
@@ -66,30 +23,20 @@ function ContextPicker({ navigation }) {
   const [dataList, setDataList] = useState([])
 
   useEffect(() => {
-    // Get context from database
-    var contextList = [];
-    db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM contexto',
-        [],
-        (tx, res) => {
-          for (let i = 0; i < res.rows.length; i++) {
-            contextList.push(results.rows.item(i));
-          }
-        }
-      )
-    })
+    const getContextData = async () => {
+      const contextList = await getContext();
+      var tmp = [];
+      for (let i = 0; i < contextList.length; i++){
+        tmp.push({
+          id: contextList[i]["id_contexto"],
+          title: contextList[i]["name"]
+        })
+      }
+      setDataList(tmp);
+    };
 
-    // Create data for button list
-    var temp = []
-    for (let i = 0; i < contextList.length; i++) {
-      temp.push({
-        id: contextList[i].id_contexto,
-        text: contextList[i].name
-      });
-    }
-    setDataList(temp);
 
+    getContextData();
   }, [])
 
   const renderItem = ({ item }) => {
@@ -112,7 +59,7 @@ function ContextPicker({ navigation }) {
     <View
       style={styles.container}>
       <FlatList
-        data={DATA}
+        data={dataList}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />

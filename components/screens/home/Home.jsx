@@ -1,12 +1,8 @@
 import {
   StyleSheet,
-  Button,
-  View, Text,
-  SafeAreaView,
-  Dimensions,
   StatusBar
 } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionSpecs } from '@react-navigation/stack';
 
 import MoodPicker from '../../statePicker/MoodPicker'
 import ContextPicker from '../../statePicker/ContextPicker';
@@ -24,7 +20,8 @@ function Home() {
           headerStyle: {
             backgroundColor: '#FFFFFF'
           },
-          headerTitleAlign: 'center'
+          headerTitleAlign: 'center',
+          gestureDirection: 'horizontal'
         }}
         styles={styles.home}
       />

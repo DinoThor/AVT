@@ -13,26 +13,9 @@ import Settings from './components/screens/notifications/Notifications';
 
 import MorphCast from './components/morphcast/MorphCast';
 
-import useGetOnboardingStatus from './utils/useGetOnboardingStatus';
-
-//var RNFS = require('react-native-fs');
-
 const Drawer = createDrawerNavigator();
 
 function App() {
-  // const [user, setUser] = useState(null);
-
-  // const { isFirstLaunch, isLoading } = useGetOnboardingStatus();
-
-  // const basePath = RNFS.DocumentDirectoryPath;
-  // useEffect(() => {
-  //   RNFS.exists(basePath + "/userdata/database.db")
-  //     .then((exists) => {
-  //       if (!exists) {
-  //         RNFS.copyFile(basePath + "/database/default/database.db", basePath + "/userdata/")
-  //       }
-  //     })
-  // })
 
   return (
     <NavigationContainer>
@@ -67,7 +50,7 @@ function App() {
           component={Settings}
         />
       </Drawer.Navigator>
-      <MorphCast />
+      <MorphCast /> 
     </NavigationContainer>
   );
 }
