@@ -1,22 +1,48 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ImageBackgroundComponent, StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { getSessionId } from '../utils/asyncStorage';
 
-import Happy from './faces/Happy'
-import Neutral from './faces/Neutral';
-import Sad from './faces/Sad';
+
+
+const Item = ({ item, onPress }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={[styles.item]}>
+    <Text
+      style={[styles.title]}>
+      {item.title}
+    </Text>
+  </TouchableOpacity>
+);
 
 const MoodPicker = () => {
-
+  const [dataList, setDataList] = useState([]);
   const [sessionId, setSessionId] = useState(null);
 
   useEffect(() => {
-    async function sessionId() {
+    const sessionId = async () => {
       let id = await getSessionId();
       setSessionId(id);
     }
-    
+
+    const getMoodData = async () => {
+      const moodList = await getMood();
+      var tmp = [];
+      for (let i = 0; i < moosList.length; i++) {
+        tmp.push({
+          id: moodList[i]["id_contexto"],
+          title: moodList[i]["name"]
+        })
+      }
+      setDataList(tmp);
+    };
+
     sessionId();
   });
 
