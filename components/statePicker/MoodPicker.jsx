@@ -1,26 +1,37 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { ImageBackgroundComponent, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getSessionId } from '../utils/asyncStorage';
 
 import Happy from './faces/Happy'
 import Neutral from './faces/Neutral';
 import Sad from './faces/Sad';
 
-const MoodPicker = ({ route }) => {
-  const { itemId } = route.params;
+const MoodPicker = () => {
+
+  const [sessionId, setSessionId] = useState(null);
+
+  useEffect(() => {
+    async function sessionId() {
+      let id = await getSessionId();
+      setSessionId(id);
+    }
+    
+    sessionId();
+  });
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.buttons}>
-        <Happy/>
+        <Happy />
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttons}>
-        <Neutral/>
+        <Neutral />
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttons}>
-        <Sad/>
+        <Sad />
       </TouchableOpacity>
-      
+
     </View>
   );
 };

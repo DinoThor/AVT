@@ -3,7 +3,7 @@ import WebView from 'react-native-webview';
 
 import { SafeAreaView } from 'react-native';
 
-function MorphCast() {
+function MorphCast({ id }) {
   return (
     <SafeAreaView style={{ flex: 0 }}>
       <WebView
@@ -19,8 +19,8 @@ function MorphCast() {
 }
 
 
-function treatData(data) {
-
+async function treatData(data) {
+  
 }
 
 export default MorphCast;

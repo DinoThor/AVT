@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -19,14 +19,14 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
   </TouchableOpacity>
 );
 
-function ContextPicker({ navigation }) {
-  const [dataList, setDataList] = useState([])
+function ContextPicker({ navigation, route }) {
+  const [dataList, setDataList] = useState([]);
 
   useEffect(() => {
     const getContextData = async () => {
       const contextList = await getContext();
       var tmp = [];
-      for (let i = 0; i < contextList.length; i++){
+      for (let i = 0; i < contextList.length; i++) {
         tmp.push({
           id: contextList[i]["id_contexto"],
           title: contextList[i]["name"]
@@ -34,7 +34,6 @@ function ContextPicker({ navigation }) {
       }
       setDataList(tmp);
     };
-
 
     getContextData();
   }, [])
@@ -46,9 +45,7 @@ function ContextPicker({ navigation }) {
     return (
       <Item
         item={item}
-        onPress={() => navigation.navigate('MoodPicker', {
-          itemId: item.id
-        })}
+        onPress={() => navigation.navigate('MoodPicker', { itemId: item.id })}
         backgroundColor={backgroundColor}
         textColor={color}
       />
@@ -76,10 +73,12 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderWidth: 2
+    borderWidth: 2,
+    borderRadius: 50,
+
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
   },
 });
 

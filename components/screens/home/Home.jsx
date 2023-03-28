@@ -10,6 +10,7 @@ import ContextPicker from '../../statePicker/ContextPicker';
 const Stack = createStackNavigator();
 
 function Home() {
+  
   return (
     <Stack.Navigator>
       <Stack.Screen
