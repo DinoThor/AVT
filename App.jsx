@@ -1,7 +1,8 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useEffect } from 'react';
 
 import 'react-native-gesture-handler';
-import asyncStorage, { getSessionId, isOnGoing, setSessionId, _retrieveData } from './components/utils/asyncStorage';
+import { isOnGoing, setSessionId, _retrieveData } from './components/utils/asyncStorage';
+import { selectav, setSesion } from './components/utils/dataService';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -12,10 +13,9 @@ import Home from './components/screens/home/Home';
 import Notifications from './components/screens/notifications/Notifications';
 import Settings from './components/screens/notifications/Notifications';
 import MorphCast from './components/morphcast/MorphCast';
-import { setSesion, } from './components/utils/dataService';
+
 
 const Drawer = createDrawerNavigator();
-const SessionContext = createContext(null);
 
 function App() {
   useEffect(() => {
@@ -30,6 +30,13 @@ function App() {
     }
 
     getSession();
+
+    // const test = async () => {
+    //   await selectav()
+    // }
+
+
+    // test()
   }, [])
 
   return (

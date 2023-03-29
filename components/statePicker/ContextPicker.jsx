@@ -53,8 +53,7 @@ function ContextPicker({ navigation, route }) {
   };
 
   return (
-    <View
-      style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={dataList}
         renderItem={renderItem}

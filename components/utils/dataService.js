@@ -30,22 +30,83 @@ export async function getContext() {
 
 
 /**
+ * Devuelve los estados afectivos guardados en la base de datos prepoblada
+ * @returns {list}
+ */
+export async function getMood() {
+  const db = await getDBConnection();
+  const mood = [];
+
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'SELECT * FROM estadoAfectivo',
+      [],
+      (tx, result) => {
+        for (let i = 0; i < result.rows.length; i++) {
+          mood.push(result.rows.item(i))
+        }
+      },
+      (err) => console.log(err)
+    );
+  })
+  return mood;
+}
+
+
+/**
  * Crea una sesión en base de datos por rellenar. 
  */
 export async function setSesion() {
   const db = await getDBConnection();
 
-  await db.transaction((txn) => {
+  db.transaction((txn) => {
     txn.executeSql(
       'INSERT INTO sesion DEFAULT VALUES',
       [],
-      (tx, result) => {},
+      (tx, result) => { },
       (err) => console.log(err)
-    )
+    ).then(() =>{}, () => {})
   })
   var sesionId = lastId();
   return sesionId;
 };
+
+
+/**
+ * Guarda en base de datos la muestra detectada
+ * @param {SQLite connection} db 
+ * @param {Integer} id 
+ * @param {Val dic} values 
+ */
+export async function storeAV(db, id, values) {
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'INSERT INTO AV(id_sesion, arousal, valence, fecha) VALUES (?,?,?,?)',
+      [id, values['arousal'], values['valence'], new Date().toLocaleString()],
+      (tx, result) => { console.log(result) },
+      (err) => console.log(err)
+    )
+  })
+}
+
+
+export async function selectav() {
+  const db = await getDBConnection();
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'SELECT * FROM AV',
+      [],
+      (tx, res) => {
+        //console.log(res)
+        for (let i = 0; i < res.rows.length; i++) {
+          console.log(res.rows.item(i))
+        }
+      },
+      (err) => console.log(err)
+    )
+  });
+}
+
 
 
 async function lastId() {
@@ -55,7 +116,7 @@ async function lastId() {
     txn.executeSql(
       'SELECT last_insert_rowid()',
       [],
-      (tx, result) => { 
+      (tx, result) => {
         for (let i = 0; i < result.rows.length; i++) {
           id.push(result.rows.item(i)["last_insert_rowid()"])
         }
@@ -74,7 +135,7 @@ async function lastId() {
  * las tablas y valores necesarios
  * @returns db connection
  */
-async function getDBConnection() {
+export async function getDBConnection() {
   return openDatabase({
     name: DATABASE_NAME,
     location: 'default',

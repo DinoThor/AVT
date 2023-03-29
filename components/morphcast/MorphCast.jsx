@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
 
 import { SafeAreaView } from 'react-native';
+import { getSessionId } from '../utils/asyncStorage';
+import { getDBConnection, storeAV } from '../utils/dataService';
 
-function MorphCast({ id }) {
+function MorphCast() {
+  const [sessionId, setsessionId] = useState(null);
+  const [db, setdb] = useState(null);
+
+  useEffect(() => {
+    const retriveDBCon = async () => {
+      let db = await getDBConnection();
+      setdb(db);
+    }
+
+    setsessionId(getSessionId());
+  }, [])
+
+  const test = async (db, sessionId, rawData) => {
+    await storeAV(db, sessionId, rawData)
+  }
+
   return (
     <SafeAreaView style={{ flex: 0 }}>
       <WebView
@@ -11,7 +29,9 @@ function MorphCast({ id }) {
           uri: "https://dinothor.github.io/AVT/"
         }}
         onMessage={(e) => {
-          treatData(JSON.parse(e.nativeEvent.data))
+          let rawData = JSON.parse(e.nativeEvent.data)['output']
+          
+          test(db, sessionId, rawData)
         }}
       />
     </SafeAreaView>
@@ -19,8 +39,9 @@ function MorphCast({ id }) {
 }
 
 
-async function treatData(data) {
-  
+function treatData(data) {
+  console.log(data)
+  //console.log(data['arousal'], data['valence'])
 }
 
 export default MorphCast;
