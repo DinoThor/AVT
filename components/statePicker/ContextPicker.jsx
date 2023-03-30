@@ -19,7 +19,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
   </TouchableOpacity>
 );
 
-function ContextPicker({ navigation, route }) {
+function ContextPicker({ navigation }) {
   const [dataList, setDataList] = useState([]);
 
   useEffect(() => {

@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { getMood } from '../utils/dataService';
+import { getMood, setSesion } from '../utils/dataService';
+import SuccesDialog from '../succesDialog/succesDialog';
 
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
@@ -22,8 +23,12 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
   </TouchableOpacity>
 );
 
-const MoodPicker = () => {
+
+
+
+const MoodPicker = ({ route }) => {
   const [dataList, setDataList] = useState([]);
+  const [showSuccesDialog, setshowSuccesDialog] = useState(false);
 
   useEffect(() => {
     const getMoodData = async () => {
@@ -49,12 +54,20 @@ const MoodPicker = () => {
     return (
       <Item
         item={item}
-        onPress={() => { }}
+        onPress={() => { closeSession(item.id, route) }}
         backgroundColor={backgroundColor}
         textColor={color}
       />
     );
   };
+
+
+  const closeSession = (mood, route) => {
+    let context = route.params['itemId'];
+
+    setSesion(mood, context);
+    setshowSuccesDialog(true);
+  }
 
   return (
     <View style={styles.container}>
@@ -64,6 +77,11 @@ const MoodPicker = () => {
         numColumns={2}
         renderItem={renderItem}
         keyExtractor={item => item.id}
+      />
+      <SuccesDialog
+        displayMsg={'Registro correcto'}
+        visibility={showSuccesDialog}
+        dismissAlert={setshowSuccesDialog}
       />
     </View>
   );

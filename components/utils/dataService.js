@@ -1,5 +1,4 @@
 import { openDatabase, enablePromise } from 'react-native-sqlite-storage';
-import { sessionData } from './asyncStorage';
 
 const DATABASE_NAME = "userDataBase.db";
 enablePromise(true);
@@ -56,7 +55,7 @@ export async function getMood() {
 /**
  * Crea una sesión en base de datos por rellenar. 
  */
-export async function setSesion() {
+export async function createSesion() {
   const db = await getDBConnection();
 
   db.transaction((txn) => {
@@ -65,10 +64,30 @@ export async function setSesion() {
       [],
       (tx, result) => { },
       (err) => console.log(err)
-    ).then(() =>{}, () => {})
+    )
   })
   var sesionId = lastId();
   return sesionId;
+};
+
+
+/**
+ * Guarda en la entrada de sesión el contexto y estado afectivo
+ * seleccionados (sin finalizar).
+ * @param {Integer} mood 
+ * @param {Integer} context 
+ */
+export async function setSesion(mood, context) {
+  const db = await getDBConnection();
+
+  db.transaction((txn) => {
+    txn.executeSql(
+      'INSERT INTO sesion(id_estado, id_contexto, finalizada) VALUES (?,?,?)',
+      [mood, context, 0],
+      (tx, result) => { },
+      (err) => console.log(err)
+    )
+  })
 };
 
 
@@ -81,8 +100,8 @@ export async function setSesion() {
 export async function storeAV(db, id, values) {
   await db.transaction((txn) => {
     txn.executeSql(
-      'INSERT INTO AV(id_sesion, arousal, valence, fecha) VALUES (?,?,?,?)',
-      [id, values['arousal'], values['valence'], new Date().toLocaleString()],
+      'INSERT INTO AV(id_sesion, arousal, valence, fecha) VALUES (?,?,?, DateTime(\'now\'))',
+      [id, values['arousal'], values['valence']],
       (tx, result) => { console.log(result) },
       (err) => console.log(err)
     )
@@ -90,25 +109,10 @@ export async function storeAV(db, id, values) {
 }
 
 
-export async function selectav() {
-  const db = await getDBConnection();
-  await db.transaction((txn) => {
-    txn.executeSql(
-      'SELECT * FROM AV',
-      [],
-      (tx, res) => {
-        //console.log(res)
-        for (let i = 0; i < res.rows.length; i++) {
-          console.log(res.rows.item(i))
-        }
-      },
-      (err) => console.log(err)
-    )
-  });
-}
-
-
-
+/**
+ * Devuelve el Id de la última tabla insertada.
+ * @returns {Integed} Id
+ */
 async function lastId() {
   const db = await getDBConnection();
   const id = [];
@@ -142,38 +146,24 @@ export async function getDBConnection() {
     createFromLocation: '~www/' + DATABASE_NAME
   },
     () => { },
-    (err) => console.log(err));
+    (err) => console.log(err)
+  );
 }
 
 
-
-
-
-
-
-
-
-
-// export const insertAV = async (db, session, values) => {
-//   var date = new Date();
-//   db.transaction(function (txn) {
-//     txn.executeSql(
-//       "INSERT INTO AV(id, arousal, valence, fecha) VALUES (?,?,?,?)",
-//       [session, values["arousal"], values["valence"], date.toISOString()]
-//     )
-//   })
-// }
-
-// export const selectEstado = (db, estado) => {
-//   db.transaction(function (txn) {
-//     txn.executeSql(
-//       "SELECT name FROM estadoAfectivo WHERE id_estado = ?",
-//       [estado],
-//       (tx, results) => {
-//         results.rows.item(0)
-//       }
-//     )
-//   })
-// }
-
-
+// DEMO
+export async function selectav() {
+  const db = await getDBConnection();
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'SELECT * FROM AV',
+      [],
+      (tx, res) => {
+        for (let i = 0; i < res.rows.length; i++) {
+          console.log(res.rows.item(i))
+        }
+      },
+      (err) => console.log(err)
+    )
+  });
+}

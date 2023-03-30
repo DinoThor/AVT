@@ -10,17 +10,17 @@ function MorphCast() {
   const [db, setdb] = useState(null);
 
   useEffect(() => {
-    const retriveDBCon = async () => {
+    const Init = async () => {
       let db = await getDBConnection();
       setdb(db);
+
+      let id = await getSessionId();
+      setsessionId(id);
     }
 
-    setsessionId(getSessionId());
+    Init();
   }, [])
 
-  const test = async (db, sessionId, rawData) => {
-    await storeAV(db, sessionId, rawData)
-  }
 
   return (
     <SafeAreaView style={{ flex: 0 }}>
@@ -28,20 +28,11 @@ function MorphCast() {
         source={{
           uri: "https://dinothor.github.io/AVT/"
         }}
-        onMessage={(e) => {
-          let rawData = JSON.parse(e.nativeEvent.data)['output']
-          
-          test(db, sessionId, rawData)
-        }}
+        onMessage={(e) => storeAV(db, sessionId, JSON.parse(e.nativeEvent.data)['output'])}
       />
     </SafeAreaView>
   );
 }
 
-
-function treatData(data) {
-  console.log(data)
-  //console.log(data['arousal'], data['valence'])
-}
 
 export default MorphCast;

@@ -3,6 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const SESSION_KEY = 'sessionOnGoing';
 const SESSION_DATA = 'sessionInfo';
 
+const ON_GOING = 'onGoing';
+const NEW_SESSION = 'newSession';
 
 /**
  * Verifica si, al abrir la aplicación, existe una sesión sin cerrar.
@@ -12,7 +14,7 @@ const SESSION_DATA = 'sessionInfo';
  * @returns {boolean}
  */
 export const isOnGoing = async () => {
-  return await _retrieveData(SESSION_KEY) == 'onGoing';
+  return await _retrieveData(SESSION_KEY) == ON_GOING;
 }
 
 
@@ -35,11 +37,16 @@ export const setSessionId = async (id) => {
 }
 
 
+export const setSessionOnGoing = async () => {
+  _storeData(SESSION_KEY, ON_GOING);
+  _storeData(SESSION_DATA, )
+}
+
 /**
  * Cierra la sesión que quedó pendiente
  */
 export const closeSession = async () => {
-  _storeData(SESSION_KEY, 'newSession');
+  _storeData(SESSION_KEY, NEW_SESSION);
   _storeData(SESSION_DATA, '--')
 }
 
