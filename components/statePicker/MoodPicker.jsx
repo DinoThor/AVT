@@ -5,9 +5,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  BackHandler
 } from 'react-native';
 import { getMood, setSesion } from '../utils/dataService';
 import SuccesDialog from '../succesDialog/succesDialog';
+import { getSessionId, setSessionId } from '../utils/asyncStorage';
 
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
@@ -26,7 +28,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
 
 
 
-const MoodPicker = ({ route }) => {
+const MoodPicker = ({ navigation, route }) => {
   const [dataList, setDataList] = useState([]);
   const [showSuccesDialog, setshowSuccesDialog] = useState(false);
 
@@ -64,9 +66,17 @@ const MoodPicker = ({ route }) => {
 
   const closeSession = (mood, route) => {
     let context = route.params['itemId'];
+    let id = getSessionId();
 
-    setSesion(mood, context);
+    setSesion(id, mood, context);
     setshowSuccesDialog(true);
+
+  }
+
+  const dismissDialog = () => {
+    setshowSuccesDialog(false);
+    navigation.navigate('ContextPicker')
+    setTimeout(() => BackHandler.exitApp(), 190)
   }
 
   return (
@@ -81,7 +91,7 @@ const MoodPicker = ({ route }) => {
       <SuccesDialog
         displayMsg={'Registro correcto'}
         visibility={showSuccesDialog}
-        dismissAlert={setshowSuccesDialog}
+        onPress={dismissDialog}
       />
     </View>
   );

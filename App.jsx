@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
 import 'react-native-gesture-handler';
-import { isOnGoing, setSessionId, _retrieveData } from './components/utils/asyncStorage';
+import { isOnGoing, setSessionId, setSessionOnGoing, _retrieveData } from './components/utils/asyncStorage';
 import { createSesion } from './components/utils/dataService';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,72 +21,55 @@ import MorphCast from './components/morphcast/MorphCast';
 const Drawer = createDrawerNavigator();
 
 function App() {
-  const [mainWindow, setmainWindow] = useState(false);
+  const checkSession = async () => { return await isOnGoing(); }
 
-  useEffect(() => {
-    const checkSession = async () => {
-      var onGoing = await isOnGoing();
-      if (!onGoing) {
-        CreateNewSession();
-        setmainWindow(true);
-      }
-    }
+  const CreateNewSession = async () => {
+    createSesion().then((id) => setSessionId(id))
+    setSessionOnGoing();
+  }
 
-    const CreateNewSession = async () => {
-      var newSessionId = await createSesion();
-      setSessionId(newSessionId);
-    }
+  var onGoing = true;
+  checkSession().then((value) => onGoing = value);
+  if (!onGoing) { CreateNewSession(); }
+  console.log(onGoing)
 
-    checkSession();
-  }, [])
-
-  if (mainWindow) {
-    return (
-      <NavigationContainer>
-        <Drawer.Navigator
-          screenOptions={{
-            activeTintColor: '#e91e63',
-            itemStyle: { marginVertical: 5 },
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator
+        screenOptions={{
+          activeTintColor: '#e91e63',
+          itemStyle: { marginVertical: 5 },
+        }}
+        drawerContent={(props) => <CustomSidebarMenu {...props} />}>
+        <Drawer.Screen
+          name="Home"
+          options={{
+            headerShown: false,
+            drawerLabel: 'Pantalla principal'
           }}
-          drawerContent={(props) => <CustomSidebarMenu {...props} />}>
-          <Drawer.Screen
-            name="Home"
-            options={{
-              headerShown: false,
-              drawerLabel: 'Pantalla principal'
-            }}
-            component={Home}
-          />
-          <Drawer.Screen
-            name="Notifications"
-            options={{
-              drawerLabel: 'Notificaciones',
-              title: "Notificaciones"
-            }}
-            component={Notifications}
-          />
-          <Drawer.Screen
-            name="Settings"
-            options={{
-              drawerLabel: 'Ajustes',
-              title: "Ajustes"
-            }}
-            component={Settings}
-          />
-        </Drawer.Navigator>
-        <MorphCast />
-      </NavigationContainer>
-    );
-  }
-  else {
-    return (
-      <View>
-        <Text>
-          Test
-        </Text>
-      </View>
-    );
-  }
+          component={Home}
+          initialParams={{ isFeedBack: onGoing }}
+        />
+        <Drawer.Screen
+          name="Notifications"
+          options={{
+            drawerLabel: 'Notificaciones',
+            title: "Notificaciones"
+          }}
+          component={Notifications}
+        />
+        <Drawer.Screen
+          name="Settings"
+          options={{
+            drawerLabel: 'Ajustes',
+            title: "Ajustes"
+          }}
+          component={Settings}
+        />
+      </Drawer.Navigator>
+      <MorphCast />
+    </NavigationContainer>
+  );
 }
 
 export default App;

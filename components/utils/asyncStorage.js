@@ -33,13 +33,13 @@ export const getSessionId = async () => {
  * @param {Integer} id
  */
 export const setSessionId = async (id) => {
-  _storeData(SESSION_DATA, id.toString());
+  console.log(id)
+  //_storeData(SESSION_DATA, idStr);
 }
 
 
 export const setSessionOnGoing = async () => {
   _storeData(SESSION_KEY, ON_GOING);
-  _storeData(SESSION_DATA, )
 }
 
 /**

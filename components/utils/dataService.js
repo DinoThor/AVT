@@ -77,13 +77,19 @@ export async function createSesion() {
  * @param {Integer} mood 
  * @param {Integer} context 
  */
-export async function setSesion(mood, context) {
+export async function setSesion(id, mood, context) {
   const db = await getDBConnection();
 
   db.transaction((txn) => {
     txn.executeSql(
-      'INSERT INTO sesion(id_estado, id_contexto, finalizada) VALUES (?,?,?)',
-      [mood, context, 0],
+      `
+      UPDATE sesion
+      SET id_estado = ?,
+          id_contexto = ?,
+          finalizada = 0
+      WHERE id = ?;
+      `,
+      [mood, context, id],
       (tx, result) => { },
       (err) => console.log(err)
     )

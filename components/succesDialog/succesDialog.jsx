@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Modal, Text, View, TouchableOpacity, Image } from 'react-native';
+import { Modal, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function SuccesDialog({
   displayMsg,
   visibility,
-  dismissAlert,
+  onPress,
 }) {
   return (
     <View>
@@ -44,7 +44,7 @@ export default function SuccesDialog({
 
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => dismissAlert(false)}
+              onPress={onPress}
               style={{
                 width: '95%',
                 borderRadius: 0,
