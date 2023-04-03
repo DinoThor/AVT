@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Text, View } from 'react-native';
+import { AppState, Text, View } from 'react-native';
 
 import 'react-native-gesture-handler';
-import { isOnGoing, setSessionId, setSessionOnGoing, _retrieveData } from './components/utils/asyncStorage';
+import { isOnGoing, setSessionId, _storeData } from './components/utils/asyncStorage';
 import { createSesion } from './components/utils/dataService';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,24 +14,28 @@ import CustomSidebarMenu from './components/sidebar/CustomSidebarMenu';
 import Home from './components/screens/home/Home';
 import Notifications from './components/screens/notifications/Notifications';
 import Settings from './components/screens/notifications/Notifications';
-import FeedBack from './components/screens/feedback/FeedBack';
 import MorphCast from './components/morphcast/MorphCast';
 
 
 const Drawer = createDrawerNavigator();
 
 function App() {
-  const checkSession = async () => { return await isOnGoing(); }
+  useEffect(() => {
+    const handleChange = (newState) => {
+      if (newState == 'active') {
+        isOnGoing().then((value) => {
+          //console.log(value)
+          if (!value) {
+            createSesion().then((id) => { console.log(id); setSessionId(id) });
+          }
+        });
+      }
+    }
 
-  const CreateNewSession = async () => {
-    createSesion().then((id) => setSessionId(id))
-    setSessionOnGoing();
-  }
 
-  var onGoing = true;
-  checkSession().then((value) => onGoing = value);
-  if (!onGoing) { CreateNewSession(); }
-  console.log(onGoing)
+    AppState.addEventListener('change', handleChange);
+    return () => { AppState.removeEventListener('change', handleChange) }
+  }, []);
 
   return (
     <NavigationContainer>
@@ -48,7 +52,6 @@ function App() {
             drawerLabel: 'Pantalla principal'
           }}
           component={Home}
-          initialParams={{ isFeedBack: onGoing }}
         />
         <Drawer.Screen
           name="Notifications"
@@ -67,7 +70,7 @@ function App() {
           component={Settings}
         />
       </Drawer.Navigator>
-      <MorphCast />
+      {/* <MorphCast /> */}
     </NavigationContainer>
   );
 }

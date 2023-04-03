@@ -4,6 +4,9 @@ const DATABASE_NAME = "userDataBase.db";
 enablePromise(true);
 
 
+//*************************************
+//************* QUERYS ****************
+//*************************************
 /**
  * Devuelve los contextos guardados en la base de datos prepoblada
  * @returns List with saved context
@@ -53,69 +56,6 @@ export async function getMood() {
 
 
 /**
- * Crea una sesión en base de datos por rellenar. 
- */
-export async function createSesion() {
-  const db = await getDBConnection();
-
-  db.transaction((txn) => {
-    txn.executeSql(
-      'INSERT INTO sesion DEFAULT VALUES',
-      [],
-      (tx, result) => { },
-      (err) => console.log(err)
-    )
-  })
-  var sesionId = lastId();
-  return sesionId;
-};
-
-
-/**
- * Guarda en la entrada de sesión el contexto y estado afectivo
- * seleccionados (sin finalizar).
- * @param {Integer} mood 
- * @param {Integer} context 
- */
-export async function setSesion(id, mood, context) {
-  const db = await getDBConnection();
-
-  db.transaction((txn) => {
-    txn.executeSql(
-      `
-      UPDATE sesion
-      SET id_estado = ?,
-          id_contexto = ?,
-          finalizada = 0
-      WHERE id = ?;
-      `,
-      [mood, context, id],
-      (tx, result) => { },
-      (err) => console.log(err)
-    )
-  })
-};
-
-
-/**
- * Guarda en base de datos la muestra detectada
- * @param {SQLite connection} db 
- * @param {Integer} id 
- * @param {Val dic} values 
- */
-export async function storeAV(db, id, values) {
-  await db.transaction((txn) => {
-    txn.executeSql(
-      'INSERT INTO AV(id_sesion, arousal, valence, fecha) VALUES (?,?,?, DateTime(\'now\'))',
-      [id, values['arousal'], values['valence']],
-      (tx, result) => { console.log(result) },
-      (err) => console.log(err)
-    )
-  })
-}
-
-
-/**
  * Devuelve el Id de la última tabla insertada.
  * @returns {Integed} Id
  */
@@ -138,6 +78,78 @@ async function lastId() {
 }
 
 
+//*************************************
+//************* INSERTS ***************
+//*************************************
+/**
+ * Crea una sesión en base de datos por rellenar. 
+ */
+export async function createSesion() {
+  const db = await getDBConnection();
+
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'INSERT INTO sesion DEFAULT VALUES',
+      [],
+      (tx, result) => { },
+      (err) => console.log(err)
+    )
+  })
+  return lastId();
+};
+
+
+/**
+ * Guarda en base de datos la muestra detectada
+ * @param {SQLite connection} db 
+ * @param {Integer} id 
+ * @param {Val dic} values 
+ */
+export async function storeAV(db, id, values) {
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'INSERT INTO AV(id_sesion, arousal, valence, fecha) VALUES (?,?,?, DateTime(\'now\'))',
+      [id, values['arousal'], values['valence']],
+      (tx, result) => { console.log(result) },
+      (err) => console.log(err)
+    )
+  })
+}
+
+
+//*************************************
+//************* UPDATES ***************
+//*************************************
+/**
+ * Guarda en la entrada de sesión el contexto y estado afectivo
+ * seleccionados (sin finalizar).
+ * @param {Integer} mood 
+ * @param {Integer} context 
+ */
+export async function updateSesion(id, mood, context) {
+  const db = await getDBConnection();
+
+  db.transaction((txn) => {
+    txn.executeSql(
+      `
+      UPDATE sesion
+      SET id_estado = ?,
+          id_contexto = ?,
+          finalizada = 0
+      WHERE id = ?;
+      `,
+      [mood, context, id],
+      (tx, result) => {}, //{ console.log(result) },
+      (err) => console.log(err)
+    )
+  })
+};
+
+//*************************************
+//*************** UTILS ***************
+//*************************************
+
+
 /**
  * Genera una nueva conexión a base de datos.
  * Si la aplicación se ejecuta por primera vez,
@@ -154,22 +166,4 @@ export async function getDBConnection() {
     () => { },
     (err) => console.log(err)
   );
-}
-
-
-// DEMO
-export async function selectav() {
-  const db = await getDBConnection();
-  await db.transaction((txn) => {
-    txn.executeSql(
-      'SELECT * FROM AV',
-      [],
-      (tx, res) => {
-        for (let i = 0; i < res.rows.length; i++) {
-          console.log(res.rows.item(i))
-        }
-      },
-      (err) => console.log(err)
-    )
-  });
 }

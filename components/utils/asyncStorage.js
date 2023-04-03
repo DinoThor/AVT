@@ -1,10 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SESSION_KEY = 'sessionOnGoing';
-const SESSION_DATA = 'sessionInfo';
+const SESSION_KEY = 'session';
+const FEEDBACK = 'feedback';
 
-const ON_GOING = 'onGoing';
-const NEW_SESSION = 'newSession';
 
 /**
  * Verifica si, al abrir la aplicación, existe una sesión sin cerrar.
@@ -14,7 +12,23 @@ const NEW_SESSION = 'newSession';
  * @returns {boolean}
  */
 export const isOnGoing = async () => {
-  return await _retrieveData(SESSION_KEY) == ON_GOING;
+  return await _retrieveData(SESSION_KEY) != ' ';
+}
+
+/**
+ * Devuelve true si hace falta preguntar el feedback
+ * @returns 
+ */
+export const askFeedBack = async () => {
+  return await _retrieveData(FEEDBACK) != 'true';
+}
+
+/**
+ * Establece si queda pendiente el FeedBack
+ * @param {Boolean} value 
+ */
+export const setFeedBack = async (value) => {
+  _storeData(FEEDBACK, value.toString());
 }
 
 
@@ -23,8 +37,8 @@ export const isOnGoing = async () => {
  * @returns {Integer} id
  */
 export const getSessionId = async () => {
-  var data = await _retrieveData(SESSION_DATA);
-  return parseInt(data);
+  var data = await _retrieveData(SESSION_KEY);
+  return data == ' ' ? 0 : parseInt(data);
 }
 
 
@@ -33,29 +47,24 @@ export const getSessionId = async () => {
  * @param {Integer} id
  */
 export const setSessionId = async (id) => {
-  console.log(id)
-  //_storeData(SESSION_DATA, idStr);
+  _storeData(SESSION_KEY, id.toString());
 }
 
-
-export const setSessionOnGoing = async () => {
-  _storeData(SESSION_KEY, ON_GOING);
-}
 
 /**
  * Cierra la sesión que quedó pendiente
  */
-export const closeSession = async () => {
-  _storeData(SESSION_KEY, NEW_SESSION);
-  _storeData(SESSION_DATA, '--')
+export const CloseSession = async () => {
+  _storeData(SESSION_KEY, ' ');
 }
 
 
-const _storeData = async (key, value) => {
+
+export const _storeData = async (key, data) => {
   try {
     await AsyncStorage.setItem(
       key,
-      value,
+      data,
     );
   } catch (error) {
     // Error saving data
@@ -65,10 +74,7 @@ const _storeData = async (key, value) => {
 
 const _retrieveData = async (key) => {
   try {
-    const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      return value;
-    }
+    return await AsyncStorage.getItem(key);
   } catch (error) {
     // Error retrieving data
   }

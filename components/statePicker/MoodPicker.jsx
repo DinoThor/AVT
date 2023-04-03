@@ -7,9 +7,9 @@ import {
   View,
   BackHandler
 } from 'react-native';
-import { getMood, setSesion } from '../utils/dataService';
+import { getMood, updateSesion } from '../utils/dataService';
 import SuccesDialog from '../succesDialog/succesDialog';
-import { getSessionId, setSessionId } from '../utils/asyncStorage';
+import { getSessionId, CloseSession, setFeedBack } from '../utils/asyncStorage';
 
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
@@ -24,8 +24,6 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
     </Text>
   </TouchableOpacity>
 );
-
-
 
 
 const MoodPicker = ({ navigation, route }) => {
@@ -66,18 +64,23 @@ const MoodPicker = ({ navigation, route }) => {
 
   const closeSession = (mood, route) => {
     let context = route.params['itemId'];
-    let id = getSessionId();
+    getSessionId().then((id) => {
+      updateSesion(id, mood, context);
+      setFeedBack(true);
+    }, (err) => console.log(err));
 
-    setSesion(id, mood, context);
+
+    //setSesion(1, 1, 1)
     setshowSuccesDialog(true);
-
   }
+
 
   const dismissDialog = () => {
     setshowSuccesDialog(false);
     navigation.navigate('ContextPicker')
     setTimeout(() => BackHandler.exitApp(), 190)
   }
+
 
   return (
     <View style={styles.container}>

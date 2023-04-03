@@ -1,21 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   StyleSheet,
   StatusBar,
-  LogBox
+  LogBox,
+  AppState
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import MoodPicker from '../../statePicker/MoodPicker'
 import ContextPicker from '../../statePicker/ContextPicker';
 import { FeedBack } from '../feedback/FeedBack';
+import { askFeedBack, isOnGoing } from '../../utils/asyncStorage';
 
 LogBox.ignoreLogs(['Non-serializable values were found in the navigation state',]);
 
 const Stack = createStackNavigator();
 
-function Home({ route }) {
-  const [feedBack, setfeedBack] = useState(route.params['isFeedBack']);
+function Home() {
+  const [feedBack, setfeedBack] = useState(false);
+
+  useEffect(() => {
+    const handleChange = (newState) => {
+      if (newState == 'active') {
+        askFeedBack().then((value) => {console.log(value); setfeedBack(value)})
+      };
+    }
+
+    AppState.addEventListener('change', handleChange);
+    return () => { AppState.removeEventListener('change', handleChange) }
+  }, []);
 
   if (!feedBack)
     return (
@@ -64,7 +77,7 @@ function Home({ route }) {
             gestureDirection: 'horizontal'
           }}
           styles={styles.home}
-          initialParams={{feedBack: setfeedBack}}
+          initialParams={{ feedBack: setfeedBack }}
         />
       </Stack.Navigator>
     );
@@ -86,4 +99,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home
+export default Home;
