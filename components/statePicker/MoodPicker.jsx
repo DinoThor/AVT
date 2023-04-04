@@ -69,8 +69,6 @@ const MoodPicker = ({ navigation, route }) => {
       setFeedBack(true);
     }, (err) => console.log(err));
 
-
-    //setSesion(1, 1, 1)
     setshowSuccesDialog(true);
   }
 

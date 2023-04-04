@@ -12,7 +12,9 @@ const FEEDBACK = 'feedback';
  * @returns {boolean}
  */
 export const isOnGoing = async () => {
-  return await _retrieveData(SESSION_KEY) != ' ';
+  let data = await _retrieveData(SESSION_KEY);
+  if (data == null) return false;
+  return data != ' '
 }
 
 /**
@@ -20,7 +22,9 @@ export const isOnGoing = async () => {
  * @returns 
  */
 export const askFeedBack = async () => {
-  return await _retrieveData(FEEDBACK) != 'true';
+  let data = await _retrieveData(FEEDBACK);
+  if (data == null) return false;
+  return data == 'true';
 }
 
 /**

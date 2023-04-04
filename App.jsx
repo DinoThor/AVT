@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-import { AppState, Text, View } from 'react-native';
+import { AppState } from 'react-native';
 
 import 'react-native-gesture-handler';
 import { isOnGoing, setSessionId, _storeData } from './components/utils/asyncStorage';
@@ -24,9 +24,8 @@ function App() {
     const handleChange = (newState) => {
       if (newState == 'active') {
         isOnGoing().then((value) => {
-          //console.log(value)
           if (!value) {
-            createSesion().then((id) => { console.log(id); setSessionId(id) });
+            createSesion().then((id) => { setSessionId(id) });
           }
         });
       }

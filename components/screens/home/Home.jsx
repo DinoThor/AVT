@@ -10,7 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MoodPicker from '../../statePicker/MoodPicker'
 import ContextPicker from '../../statePicker/ContextPicker';
 import { FeedBack } from '../feedback/FeedBack';
-import { askFeedBack, isOnGoing } from '../../utils/asyncStorage';
+import { askFeedBack } from '../../utils/asyncStorage';
 
 LogBox.ignoreLogs(['Non-serializable values were found in the navigation state',]);
 
@@ -22,7 +22,7 @@ function Home() {
   useEffect(() => {
     const handleChange = (newState) => {
       if (newState == 'active') {
-        askFeedBack().then((value) => {console.log(value); setfeedBack(value)})
+        askFeedBack().then((value) => setfeedBack(value))
       };
     }
 

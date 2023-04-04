@@ -131,19 +131,32 @@ export async function updateSesion(id, mood, context) {
 
   db.transaction((txn) => {
     txn.executeSql(
-      `
-      UPDATE sesion
-      SET id_estado = ?,
-          id_contexto = ?,
-          finalizada = 0
-      WHERE id = ?;
-      `,
+      'UPDATE sesion SET id_estado = ?, id_contexto = ?, finalizada = 0 WHERE id = ?',
       [mood, context, id],
       (tx, result) => {}, //{ console.log(result) },
       (err) => console.log(err)
     )
   })
 };
+
+
+/**
+ * Actualiza la sesión con el feedback, y la cierra.
+ * @param {Integer} id 
+ * @param {Integer} finalMood 
+ */
+export async function feedbackSession(id, finalMood) {
+  const db = await getDBConnection();
+
+  db.transaction((txn) => {
+    txn.executeSql(
+      'UPDATE sesion SET id_estado_final = ?, finalizada = 1 WHERE id = ?',
+      [finalMood, id],
+      (tx, result) => {},
+      (err) => console.log(err)
+    )
+  })
+}
 
 //*************************************
 //*************** UTILS ***************
