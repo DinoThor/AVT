@@ -13,7 +13,7 @@ import CustomSidebarMenu from './components/sidebar/CustomSidebarMenu';
 
 import Home from './components/screens/home/Home';
 import Notifications from './components/screens/notifications/Notifications';
-import Settings from './components/screens/notifications/Notifications';
+import Settings from './components/screens/settings/Settings';
 import MorphCast from './components/morphcast/MorphCast';
 
 
@@ -56,7 +56,7 @@ function App() {
           name="Notifications"
           options={{
             drawerLabel: 'Notificaciones',
-            title: "Notificaciones"
+            title: "Notificaciones",
           }}
           component={Notifications}
         />

@@ -4,11 +4,16 @@ export default function Notifications() {
     return (
         <View
             style={{
-                flex: 1, 
-                justifyContent: 'center', 
+                flex: 1,
+                justifyContent: 'center',
                 alignItems: 'center'
             }}>
-            <Text>Notifications Screen</Text>
+            <Text style={{
+                fontSize: 20,
+                fontWeight: 'bold'
+            }}>
+                PLANTILLA VACIA POR COMPLETAR
+            </Text>
         </View>
     );
 }

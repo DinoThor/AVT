@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
     fontWeight: 'bold',
-    fontSize: 15
+    fontSize: 15,
+    paddingBottom: 20
   },
   sideMenuProfileIcon: {
     resizeMode: 'center',
