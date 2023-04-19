@@ -13,7 +13,10 @@
       .licenseKey("0c1147cda5c900085bac32b44d10bf923c2edcd791ac")
       .addModule(CY.modules().FACE_AROUSAL_VALENCE.name)
       .load()
-      .then(({ start, stop }) => start());
+      .then(({ start, stop }) => {
+        start();
+        setTimeout(stop, 30000);
+      });
 
     window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
       window.ReactNativeWebView.postMessage(JSON.stringify(evt.detail))
