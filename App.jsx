@@ -30,8 +30,7 @@ function App() {
         });
       }
     }
-
-
+    
     AppState.addEventListener('change', handleChange);
     return () => { AppState.removeEventListener('change', handleChange) }
   }, []);
@@ -69,7 +68,7 @@ function App() {
           component={Settings}
         />
       </Drawer.Navigator>
-      {/* <MorphCast /> */}
+      <MorphCast />
     </NavigationContainer>
   );
 }

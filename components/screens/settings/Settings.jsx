@@ -7,6 +7,7 @@ import {
 
 import Divider from './Divider';
 
+import { SendCsvButton } from './sendCSV/SendCsvButton';
 import { EditEmailCSV } from './setEmailCSV/EmailModal';
 
 export default function Settings() {
@@ -14,14 +15,7 @@ export default function Settings() {
     <View style={styles.container}>
       <Divider title={"CSV"}/>
       <EditEmailCSV styles={styles}/>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => { }}>
-        <Text style={styles.title}>
-          Enviar respaldo datos usuario
-        </Text>
-      </TouchableOpacity>
+      <SendCsvButton styles={styles}/>
     </View>
   );
 };
@@ -45,6 +39,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 10,
+    color: 'black'
   },
   categoryTitle: {
     alignContent: 'center',

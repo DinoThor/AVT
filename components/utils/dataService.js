@@ -89,8 +89,8 @@ export async function createSesion() {
 
   await db.transaction((txn) => {
     txn.executeSql(
-      'INSERT INTO sesion DEFAULT VALUES',
-      [],
+      'INSERT INTO sesion (id_estado, id_contexto, id_estado_final) VALUES (?,?,?)',
+      [0,0,0],
       (tx, result) => { },
       (err) => console.log(err)
     )
@@ -108,8 +108,8 @@ export async function createSesion() {
 export async function storeAV(db, id, values) {
   await db.transaction((txn) => {
     txn.executeSql(
-      'INSERT INTO AV(id_sesion, arousal, valence, fecha) VALUES (?,?,?, DateTime(\'now\'))',
-      [id, values['arousal'], values['valence']],
+      'INSERT INTO AV(id_sesion, arousal, valence, fecha) VALUES (?,?,?,?)',
+      [id, values['arousal'], values['valence'], new Date().toISOString()],
       (tx, result) => { console.log(result) },
       (err) => console.log(err)
     )
@@ -176,7 +176,7 @@ export async function getDBConnection() {
     location: 'default',
     createFromLocation: '~www/' + DATABASE_NAME
   },
-    () => { },
+    (res) => { console.log(res)},
     (err) => console.log(err)
   );
 }
