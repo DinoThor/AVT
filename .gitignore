@@ -43,7 +43,6 @@ scripts
 build
 lib
 dist
-assets
 *.swp
 
 .expo/
