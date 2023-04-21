@@ -58,7 +58,7 @@ export default function SuccesDialog({
                 bottom: 0,
                 marginBottom: 10,
               }}>
-              <Text style={{ color: 'white', margin: 15 }}>OK</Text>
+              <Text style={{ color: 'white', margin: 15 }}>Cerrar</Text>
             </TouchableOpacity>
           </View>
         </View>

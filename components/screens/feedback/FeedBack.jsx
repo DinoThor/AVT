@@ -5,14 +5,12 @@ import {
   Text,
   TouchableOpacity,
   View,
-  BackHandler,
-  LogBox
+  BackHandler
 } from 'react-native';
-import { feedbackSession, getMood } from '../../utils/dataService';
-import SuccesDialog from '../../succesDialog/succesDialog';
-import { getSessionId, setFeedBack } from '../../utils/asyncStorage';
+import { feedbackSession, getMood } from '../../../utils/dataService';
+import { SuccesDialog } from '../../succesDialog/succesDialog';
+import { getSessionId, setFeedBack } from '../../../utils/asyncStorage';
 
-LogBox.ignoreLogs(['Non-serializable values were found in the navigation state',]);
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity
@@ -33,8 +31,7 @@ export const FeedBack = () => {
   const [showSuccesDialog, setshowSuccesDialog] = useState(false);
 
   useEffect(() => {
-    const getMoodData = async () => {
-      const moodList = await getMood();
+    getMood().then((moodList) => {
       var tmp = [];
       for (let i = 0; i < moodList.length; i++) {
         tmp.push({
@@ -44,9 +41,7 @@ export const FeedBack = () => {
         })
       }
       setDataList(tmp);
-    };
-
-    getMoodData();
+    })
   }, []);
 
   const renderItem = ({ item }) => {

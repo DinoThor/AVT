@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { getContext } from '../utils/dataService';
+import { getContext } from '../../../utils/dataService';
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity

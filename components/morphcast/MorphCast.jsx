@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
 
 import { SafeAreaView } from 'react-native';
-import { getSessionId } from '../utils/asyncStorage';
-import { getDBConnection, storeAV } from '../utils/dataService';
+import { getSessionId } from '../../utils/asyncStorage';
+import { getDBConnection, storeAV } from '../../utils/dataService';
 
 
 

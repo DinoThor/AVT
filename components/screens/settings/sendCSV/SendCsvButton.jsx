@@ -2,10 +2,8 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import { sendData } from './sendData';
 
-const sendData = () => {
-  return;
-}
 
 export function SendCsvButton({styles}) {
   return (

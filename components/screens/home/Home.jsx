@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import MoodPicker from '../../statePicker/MoodPicker'
-import ContextPicker from '../../statePicker/ContextPicker';
+import MoodPicker from '../mood/MoodPicker'
+import ContextPicker from '../context/ContextPicker';
 import { FeedBack } from '../feedback/FeedBack';
-import { askFeedBack } from '../../utils/asyncStorage';
+import { askFeedBack } from '../../../utils/asyncStorage';
 
 LogBox.ignoreLogs(['Non-serializable values were found in the navigation state',]);
 

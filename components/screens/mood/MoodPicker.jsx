@@ -7,19 +7,19 @@ import {
   View,
   BackHandler
 } from 'react-native';
-import { getMood, updateSesion } from '../utils/dataService';
-import SuccesDialog from '../succesDialog/succesDialog';
-import { getSessionId, CloseSession, setFeedBack } from '../utils/asyncStorage';
+import { getMood, updateSesion } from '../../../utils/dataService';
+import SuccesDialog from '../../succesDialog/succesDialog';
+import { getSessionId, setFeedBack } from '../../../utils/asyncStorage';
 
 
-const Item = ({ item, onPress, backgroundColor, textColor }) => (
+const Item = ({ item, onPress, textColor }) => (
   <TouchableOpacity
     onPress={onPress}
-    style={[styles.item, { backgroundColor }]}>
-    <Text style={[styles.emoji, { color: textColor }]}>
+    style={styles.item}>
+    <Text style={styles.emoji}>
       {item.icon}
     </Text>
-    <Text style={[styles.title, { color: textColor }]}>
+    <Text style={styles.title}>
       {item.title}
     </Text>
   </TouchableOpacity>
@@ -31,8 +31,7 @@ const MoodPicker = ({ navigation, route }) => {
   const [showSuccesDialog, setshowSuccesDialog] = useState(false);
 
   useEffect(() => {
-    const getMoodData = async () => {
-      const moodList = await getMood();
+    getMood().then((moodList) => {
       var tmp = [];
       for (let i = 0; i < moodList.length; i++) {
         tmp.push({
@@ -42,9 +41,7 @@ const MoodPicker = ({ navigation, route }) => {
         })
       }
       setDataList(tmp);
-    };
-
-    getMoodData();
+    })
   }, []);
 
   const renderItem = ({ item }) => {
@@ -104,6 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   item: {
+    backgroundColor: '#b3d1ff',
     width: '100%',
     padding: 20,
     marginVertical: 8,
@@ -114,10 +112,12 @@ const styles = StyleSheet.create({
   title: {
     alignSelf: 'center',
     fontSize: 18,
+    color: 'black',
   },
   emoji: {
     alignSelf: 'center',
     fontSize: 55,
+    color: 'black',
   },
 });
 

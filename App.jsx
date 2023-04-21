@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 
 import 'react-native-gesture-handler';
-import { isOnGoing, setSessionId, _storeData } from './components/utils/asyncStorage';
-import { createSesion } from './components/utils/dataService';
+import { isOnGoing, setSessionId, _storeData } from './utils/asyncStorage';
+import { createSesion } from './utils/dataService';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -15,7 +15,6 @@ import Home from './components/screens/home/Home';
 import Notifications from './components/screens/notifications/Notifications';
 import Settings from './components/screens/settings/Settings';
 import MorphCast from './components/morphcast/MorphCast';
-
 
 const Drawer = createDrawerNavigator();
 

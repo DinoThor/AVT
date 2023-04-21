@@ -78,6 +78,43 @@ async function lastId() {
 }
 
 
+/**
+ * Devuelve una tupla con la información de todas 
+ * las sesiones y sus registros AV correspondientes.
+ * @return {List} Sesion/AV
+ */
+export async function backupData() {
+  const db = await getDBConnection();
+  const sesiones = []; const AV = [];
+
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'SELECT * FROM sesion',
+      [],
+      (tx, results) => {
+        for(let i = 0; i < results.rows.length; i++) {
+          sesiones.push(results.rows.item(i));
+        }
+      },
+      (err) => console.log(err)
+    );
+
+    txn.executeSql(
+      'SELECT * FROM AV',
+      [],
+      (tx, results) => {
+        for(let i = 0; i < results.rows.length; i++){
+          AV.push(results.rows.item(i));
+        }
+      },
+      (err) => console.log(err)
+    );
+  });
+
+  return [sesiones, AV];
+}
+
+
 //*************************************
 //************* INSERTS ***************
 //*************************************
