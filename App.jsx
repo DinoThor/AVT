@@ -1,38 +1,65 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { AppState } from 'react-native';
+import {
+  AppState,
+  NativeModules,
+  PermissionsAndroid
+} from 'react-native';
 
 import 'react-native-gesture-handler';
-import { isOnGoing, setSessionId, _storeData } from './utils/asyncStorage';
-import { createSesion } from './utils/dataService';
+import SplashScreen from 'react-native-splash-screen'
+import {
+  isOnGoing,
+  setSessionId,
+  _storeData
+} from './src/utils/asyncStorage';
+import { createSesion } from './src/utils/dataService';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import CustomSidebarMenu from './components/sidebar/CustomSidebarMenu';
+import CustomSidebarMenu from './src/components/sidebar/CustomSidebarMenu';
 
-import Home from './components/screens/home/Home';
-import Notifications from './components/screens/notifications/Notifications';
-import Settings from './components/screens/settings/Settings';
-import MorphCast from './components/morphcast/MorphCast';
+import Home from './src/screens/home/Home';
+import Settings from './src/screens/settings/Settings';
+import MorphCast from './src/components/morphcast/MorphCast';
+
+var RNFS = require('react-native-fs');
 
 const Drawer = createDrawerNavigator();
+const { ServerModule } = NativeModules;
+
+
+
 
 function App() {
+  const [background, setBackground] = useState(false);
+
+  
   useEffect(() => {
+    //ServerModule.createServer();
+
     const handleChange = (newState) => {
       if (newState == 'active') {
+        setBackground(false);
         isOnGoing().then((value) => {
-          if (!value) {
-            createSesion().then((id) => { setSessionId(id) });
-          }
+          if (!value) createSesion().then((id) => {
+            setSessionId(id)
+          })
         });
+        setTimeout(() => SplashScreen.hide(), 500)
+      }
+      else if (newState == 'background') {
+        setBackground(true);
       }
     }
-    
-    AppState.addEventListener('change', handleChange);
-    return () => { AppState.removeEventListener('change', handleChange) }
+
+    const sub = AppState.addEventListener('change', handleChange);
+
+    return () => sub.remove()
+
   }, []);
+
 
   return (
     <NavigationContainer>
@@ -51,14 +78,6 @@ function App() {
           component={Home}
         />
         <Drawer.Screen
-          name="Notifications"
-          options={{
-            drawerLabel: 'Notificaciones',
-            title: "Notificaciones",
-          }}
-          component={Notifications}
-        />
-        <Drawer.Screen
           name="Settings"
           options={{
             drawerLabel: 'Ajustes',
@@ -67,7 +86,7 @@ function App() {
           component={Settings}
         />
       </Drawer.Navigator>
-      <MorphCast />
+      {/* {!background ? <MorphCast /> : null} */}
     </NavigationContainer>
   );
 }
