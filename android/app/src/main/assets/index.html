@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <script src="https://sdk.morphcast.com/mphtools/v1.0/mphtools.js"></script>
+    <script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js"></script>
+    <script>
+        CY.loader()
+            .licenseKey("0c1147cda5c900085bac32b44d10bf923c2edcd791ac")
+            .addModule(CY.modules().FACE_AROUSAL_VALENCE.name)
+            .load()
+            .then(({ start, stop }) => {
+                start();
+                setTimeout(stop, 30000);
+            });
+
+        window.addEventListener(CY.modules().FACE_AROUSAL_VALENCE.eventName, (evt) => {
+            window.ReactNativeWebView.postMessage(JSON.stringify(evt.detail))
+        });
+    </script>
+</body>
+
+</html>
