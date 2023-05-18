@@ -11,12 +11,12 @@ import Header from '../../components/header/Header';
 import SplashScreen from 'react-native-splash-screen';
 
 
-const Item = ({ item, onPress, backgroundColor, textColor }) => (
+const Item = ({ item, onPress }) => (
   <TouchableOpacity
     onPress={onPress}
-    style={[styles.item, { backgroundColor }]}>
+    style={styles.item}>
     <Text
-      style={[styles.title, { color: textColor }]}>
+      style={styles.title}>
       {item.title}
     </Text>
   </TouchableOpacity>
@@ -40,25 +40,27 @@ function ContextPicker({ navigation }) {
   }, [])
 
   const renderItem = ({ item }) => {
-    const backgroundColor = '#b3d1ff';
-    const color = 'black';
-
     return (
       <Item
         item={item}
         onPress={() => navigation.navigate('MoodPicker', { itemId: item.id })}
-        backgroundColor={backgroundColor}
-        textColor={color}
       />
     );
   };
 
   return (
     <View style={styles.container}>
-      <Header title={'¿Qué va a hacer ahora?'}/>
+      <Header title={'¿Qué va a hacer ahora?'} />
       <FlatList
         data={dataList}
-        renderItem={renderItem}
+        renderItem={({item}) => {
+          return (
+            <Item
+              item={item}
+              onPress={() => navigation.navigate('MoodPicker', { itemId: item.id })}
+            />
+          );
+        }}
         keyExtractor={item => item.id}
       />
     </View>
@@ -76,10 +78,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderWidth: 2,
     borderRadius: 50,
+    backgroundColor: '#b3d1ff'
 
   },
   title: {
     fontSize: 28,
+    color: 'black'
   },
 });
 

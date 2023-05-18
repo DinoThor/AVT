@@ -1,6 +1,8 @@
 import { openDatabase, enablePromise } from 'react-native-sqlite-storage';
 
 const DATABASE_NAME = "default.db";
+const ID_USUARIO = 1;
+
 enablePromise(true);
 
 
@@ -78,40 +80,51 @@ async function lastId() {
 }
 
 
+
 /**
- * Devuelve una tupla con la información de todas 
- * las sesiones y sus registros AV correspondientes.
- * @return {List} Sesion/AV
+ * Devuelve la última sesión insertada
+ * @returns {Object} Sesion
  */
-export async function backupData() {
+export async function lastSession() {
   const db = await getDBConnection();
-  const sesiones = []; const AV = [];
+  const sesion = [];
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'SELECT * FROM sesion ORDER BY id_sesion DESC LIMIT 1',
+      [],
+      (tx, result) => {
+        for (let i = 0; i < result.rows.length; i++) {
+          sesion.push(result.rows.item(i))
+        }
+      },
+      (err) => console.log(err)
+    );
+  })
+  return sesion[0];
+}
+
+
+/**
+ * Devuelve el nombre del usuario registrado (único)
+ * @returns {String} usuario
+ */
+export async function getUserName() {
+  const db = await getDBConnection();
+  const users = []
 
   await db.transaction((txn) => {
     txn.executeSql(
-      'SELECT * FROM sesion',
+      'SELECT nombre FROM usuario',
       [],
       (tx, results) => {
-        for(let i = 0; i < results.rows.length; i++) {
-          sesiones.push(results.rows.item(i));
+        for (let i = 0; i < results.rows.length; i++) {
+          users.push(results.rows.item(i));
         }
       },
       (err) => console.log(err)
-    );
-
-    txn.executeSql(
-      'SELECT * FROM AV',
-      [],
-      (tx, results) => {
-        for(let i = 0; i < results.rows.length; i++){
-          AV.push(results.rows.item(i));
-        }
-      },
-      (err) => console.log(err)
-    );
-  });
-
-  return [sesiones, AV];
+    )
+  })
+  return users[0];
 }
 
 
@@ -127,13 +140,33 @@ export async function createSesion() {
   await db.transaction((txn) => {
     txn.executeSql(
       'INSERT INTO sesion (id_contexto, mood_inicial, mood_final, id_usuario) VALUES (?,?,?,?)',
-      [0,0,0,1],
+      [0, 0, 0, ID_USUARIO],
       (tx, result) => { },
       (err) => console.log(err)
     )
   })
   return lastId();
 };
+
+/**
+ * Crea un nuevo usuario en base de datos
+ * @param {String} name 
+ * @param {String} gender 
+ * @param {Integer} age 
+ * @param {Integer} phone 
+ */
+export async function createUser(name, age, phone, gender) {
+  const db = await getDBConnection();
+
+  await db.transaction((txn) => {
+    txn.executeSql(
+      'INSERT INTO usuario(id_usuario, nombre, genero, edad, telefono) VALUES (?,?,?,?,?)',
+      [ID_USUARIO, name, gender, age, phone],
+      (tx, result) => { console.log(result) },
+      (err) => console.log(err)
+    )
+  })
+}
 
 
 /**
@@ -147,7 +180,7 @@ export async function storeAV(db, id, values) {
     txn.executeSql(
       'INSERT INTO AV(sesion, arousal, valence, fecha) VALUES (?,?,?,?)',
       [id, values['arousal'], values['valence'], new Date().toISOString()],
-      (tx, result) => { console.log(result) },
+      (tx, result) => { },
       (err) => console.log(err)
     )
   })
@@ -170,7 +203,7 @@ export async function updateSesion(id, mood, context) {
     txn.executeSql(
       'UPDATE sesion SET id_contexto = ?, mood_inicial = ? WHERE id_sesion = ?',
       [mood, context, id],
-      (tx, result) => {},
+      (tx, result) => { },
       (err) => console.log(err)
     )
   })
@@ -182,14 +215,14 @@ export async function updateSesion(id, mood, context) {
  * @param {Integer} id 
  * @param {Integer} finalMood 
  */
-export async function feedbackSession(id, finalMood) {
+export async function closeSession(id, finalMood) {
   const db = await getDBConnection();
 
   db.transaction((txn) => {
     txn.executeSql(
       'UPDATE sesion SET mood_final = ? WHERE id_sesion = ?',
       [finalMood, id],
-      (tx, result) => {},
+      (tx, result) => { },
       (err) => console.log(err)
     )
   })

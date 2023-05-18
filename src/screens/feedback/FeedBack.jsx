@@ -7,28 +7,35 @@ import {
   View,
   BackHandler
 } from 'react-native';
-import { feedbackSession, getMood } from '../../utils/dataService';
+import {
+  closeSession,
+  getMood,
+  lastSession
+} from '../../utils/dataService';
+import { useNavigation } from '@react-navigation/native';
+
 import SuccesDialog from '../../components/succesDialog/succesDialog';
-import { getSessionId, setFeedBack } from '../../utils/asyncStorage';
 import Header from '../../components/header/Header';
 import SplashScreen from 'react-native-splash-screen';
 
 
-const Item = ({ item, onPress, backgroundColor, textColor }) => (
+const Item = ({ item, onPress }) => (
   <TouchableOpacity
     onPress={onPress}
-    style={[styles.item, { backgroundColor }]}>
-    <Text style={[styles.emoji, { color: textColor }]}>
+    style={styles.item}>
+    <Text style={styles.emoji}>
       {item.icon}
     </Text>
-    <Text style={[styles.title, { color: textColor }]}>
+    <Text style={styles.title}>
       {item.title}
     </Text>
   </TouchableOpacity>
 );
 
 
-export function FeedBackPage () {
+function FeedBack() {
+  const navigation = useNavigation();
+
   const [dataList, setDataList] = useState([]);
   const [showSuccesDialog, setshowSuccesDialog] = useState(false);
 
@@ -44,54 +51,44 @@ export function FeedBackPage () {
       }
       setDataList(tmp);
     })
+    SplashScreen.hide();
   }, []);
-
-  const renderItem = ({ item }) => {
-    const backgroundColor = '#b3d1ff';
-    const color = 'black';
-
-    return (
-      <Item
-        item={item}
-        onPress={() => { closeSession(item.id) }}
-        backgroundColor={backgroundColor}
-        textColor={color}
-      />
-    );
-  };
-
-
-  const closeSession = (mood) => {
-    getSessionId().then((id) => {
-      feedbackSession(id, mood);
-      setFeedBack(false);
-    });
-    setshowSuccesDialog(true);
-  }
-
-
-  const dismissDialog = () => {
-    SplashScreen.show();
-    setshowSuccesDialog(false);
-    setFeedBack(false);
-    BackHandler.exitApp();
-  }
 
 
   return (
     <View style={styles.container}>
-      <Header title={'¿Qué tal fue la anterior actividad?'}/>
+      <Header title={'¿Qué tal fue la anterior actividad?'} />
       <FlatList
-        columnWrapperStyle={{ justifyContent: 'space-between', width: '42%' }}
+        columnWrapperStyle={{
+          justifyContent: 'space-between',
+          width: '42%'
+        }}
         data={dataList}
         numColumns={2}
-        renderItem={renderItem}
+        renderItem={({ item }) => {
+          return (
+            <Item
+              item={item}
+              onPress={() => {
+                lastSession().then((values) => {
+                  console.log(values);
+                  closeSession(values['id_sesion'], item.id);
+                  setshowSuccesDialog(true);
+                })
+              }}
+            />
+          )
+        }}
         keyExtractor={item => item.id}
       />
       <SuccesDialog
         displayMsg={'Registro correcto'}
         visibility={showSuccesDialog}
-        onPress={dismissDialog}
+        onPress={() => {
+          setshowSuccesDialog(false);
+          navigation.navigate('ContextPicker');
+          BackHandler.exitApp();
+        }}
       />
     </View>
   );
@@ -109,13 +106,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderWidth: 2,
     borderRadius: 30,
+    backgroundColor: '#b3d1ff'
   },
   title: {
     alignSelf: 'center',
     fontSize: 18,
+    color: 'black'
   },
   emoji: {
     alignSelf: 'center',
     fontSize: 55,
+    color: 'black'
   },
 });
+
+export default FeedBack;

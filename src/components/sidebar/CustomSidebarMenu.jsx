@@ -13,7 +13,8 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function CustomSidebarMenu(props) {
   return (

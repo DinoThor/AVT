@@ -7,15 +7,14 @@ import {
   View,
   BackHandler
 } from 'react-native';
-import { getMood, updateSesion } from '../../utils/dataService';
-import { getSessionId, setFeedBack } from '../../utils/asyncStorage';
+import { getMood, lastSession, updateSesion } from '../../utils/dataService';
 
 import SuccesDialog from '../../components/succesDialog/succesDialog';
 import Header from '../../components/header/Header';
 import SplashScreen from 'react-native-splash-screen';
 
 
-const Item = ({ item, onPress, textColor }) => (
+const Item = ({ item, onPress }) => (
   <TouchableOpacity
     onPress={onPress}
     style={styles.item}>
@@ -42,56 +41,50 @@ const MoodPicker = ({ navigation, route }) => {
           title: moodList[i]["name"],
           icon: moodList[i]["icon"]
         })
-        console.log(tmp[i])
       }
       setDataList(tmp);
     })
   }, []);
 
-  const renderItem = ({ item }) => {
-    return (
-      <Item
-        item={item}
-        onPress={() => { closeSession(item.id, route) }}
-        backgroundColor='#b3d1ff'
-        textColor='black'
-      />
-    );
-  };
-
 
   const closeSession = (mood, route) => {
-    getSessionId().then((id) => {
+    lastSession().then((values) => {
+      let id = values['id_sesion'];
       updateSesion(id, mood, route.params['itemId']);
-      setFeedBack(true);
     });
 
     setshowSuccesDialog(true);
   }
 
 
-  const dismissDialog = () => {
-    SplashScreen.show();
-    setshowSuccesDialog(false);
-    navigation.navigate('ContextPicker')
-    BackHandler.exitApp();
-  }
-
-
   return (
     <View style={styles.container}>
-      <Header title={'¿Y cómo le hace sentir?'}/>
+      <Header title={'¿Y cómo le hace sentir?'} />
       <FlatList
         columnWrapperStyle={{ justifyContent: 'space-between', width: '42%' }}
         data={dataList}
         numColumns={2}
-        renderItem={renderItem}
+        renderItem={({ item }) => {
+          return (
+            <Item
+              item={item}
+              onPress={() => { closeSession(item.id, route) }}
+              backgroundColor='#b3d1ff'
+              textColor='black'
+            />
+          )
+        }}
         keyExtractor={item => item.id}
       />
       <SuccesDialog
         displayMsg={'Registro correcto'}
         visibility={showSuccesDialog}
-        onPress={dismissDialog}
+        onPress={() => {
+          setshowSuccesDialog(false);
+          navigation.navigate('ContextPicker');
+          SplashScreen.show();
+          BackHandler.exitApp();
+        }}
       />
     </View>
   );

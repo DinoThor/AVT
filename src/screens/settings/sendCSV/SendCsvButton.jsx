@@ -9,7 +9,9 @@ function SendCsvButton({styles}) {
   return (
     <TouchableOpacity
       style={styles.button}
-      onPress={() => { sendData() }}>
+      onPress={() => { sendData() }}
+      disabled={true}
+      >
       <Text style={styles.title}>
         Enviar respaldo datos usuario
       </Text>

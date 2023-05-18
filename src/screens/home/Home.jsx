@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   StyleSheet,
   StatusBar,
@@ -8,53 +8,56 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import MoodPicker from '../mood/MoodPicker'
 import ContextPicker from '../context/ContextPicker';
-import { FeedBackPage } from '../feedback/FeedBack';
-import { askFeedBack } from '../../utils/asyncStorage';
-import SplashScreen from 'react-native-splash-screen';
+import FeedBack from '../feedback/FeedBack';
+
+import { useNavigation } from '@react-navigation/native';
+import { createSesion, lastSession } from '../../utils/dataService';
 
 const Stack = createStackNavigator();
 
+function askFeedBack({ navigation }) {
+  lastSession().then((values) => {
+    if (values['mood_inicial'] > 0 && values['mood_final'] == 0)
+      navigation.navigate('FeedBack');
+    else if (values['mood_inicial'] > 0 && values['mood_final'] != 0)
+      createSesion(); 
+  })
+}
+
 function Home() {
-  const [feedBack, setfeedBack] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
+    askFeedBack({navigation});
     const handleChange = (newState) => {
-      if (newState == 'active') {
-        askFeedBack().then((value) => setfeedBack(value))
-      };
+      if (newState == 'active') askFeedBack({navigation});
     }
-
     const sub = AppState.addEventListener('change', handleChange);
-    setTimeout(() => SplashScreen.hide(), 500)
     return () => { sub.remove() }
+
   }, []);
 
-  if (!feedBack)
-    return (
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ContextPicker"
-          component={ContextPicker}
-          options={{
-            headerShown: false,
-          }}
-          styles={styles.home}
-        />
-        <Stack.Screen
-          name="MoodPicker"
-          component={MoodPicker}
-          options={{
-            headerShown: false
-          }}
-          styles={styles.home}
-        />
-      </Stack.Navigator>
-    );
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="ContextPicker"
+        component={ContextPicker}
+        options={{
+          headerShown: false,
+        }}
+        styles={styles.home}
+      />
+      <Stack.Screen
+        name="MoodPicker"
+        component={MoodPicker}
+        options={{
+          headerShown: false
+        }}
+        styles={styles.home}
+      />
+      <Stack.Screen
         name="FeedBack"
-        component={FeedBackPage}
+        component={FeedBack}
         options={{
           headerShown: false
         }}
@@ -69,14 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
-  },
-  sideMenuProfileIcon: {
-    resizeMode: 'center',
-    width: 100,
-    height: 100,
-    borderRadius: 100 / 2,
-    alignSelf: 'center',
-    marginTop: 20
   }
 });
 
