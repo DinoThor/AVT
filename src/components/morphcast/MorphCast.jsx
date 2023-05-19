@@ -5,7 +5,7 @@ import { SafeAreaView, PermissionsAndroid } from 'react-native';
 import { getDBConnection, lastSession, storeAV } from '../../utils/dataService';
 
 
-function MorphCast({ sessionId }) {
+function MorphCast() {
   const [db, setdb] = useState(null);
   const [session, setsession] = useState(null);
 

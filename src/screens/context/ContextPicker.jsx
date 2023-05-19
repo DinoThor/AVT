@@ -6,9 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import { getContext } from '../../utils/dataService';
+
 import Header from '../../components/header/Header';
-import SplashScreen from 'react-native-splash-screen';
 
 
 const Item = ({ item, onPress }) => (
@@ -36,17 +37,8 @@ function ContextPicker({ navigation }) {
       }
       setDataList(tmp);
     });
-    SplashScreen.hide();
   }, [])
-
-  const renderItem = ({ item }) => {
-    return (
-      <Item
-        item={item}
-        onPress={() => navigation.navigate('MoodPicker', { itemId: item.id })}
-      />
-    );
-  };
+  
 
   return (
     <View style={styles.container}>

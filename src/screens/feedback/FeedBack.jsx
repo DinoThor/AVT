@@ -7,16 +7,15 @@ import {
   View,
   BackHandler
 } from 'react-native';
+
 import {
   closeSession,
   getMood,
   lastSession
 } from '../../utils/dataService';
-import { useNavigation } from '@react-navigation/native';
 
 import SuccesDialog from '../../components/succesDialog/succesDialog';
 import Header from '../../components/header/Header';
-import SplashScreen from 'react-native-splash-screen';
 
 
 const Item = ({ item, onPress }) => (
@@ -33,9 +32,7 @@ const Item = ({ item, onPress }) => (
 );
 
 
-function FeedBack() {
-  const navigation = useNavigation();
-
+function FeedBack({ route }) {
   const [dataList, setDataList] = useState([]);
   const [showSuccesDialog, setshowSuccesDialog] = useState(false);
 
@@ -51,7 +48,6 @@ function FeedBack() {
       }
       setDataList(tmp);
     })
-    SplashScreen.hide();
   }, []);
 
 
@@ -71,7 +67,6 @@ function FeedBack() {
               item={item}
               onPress={() => {
                 lastSession().then((values) => {
-                  console.log(values);
                   closeSession(values['id_sesion'], item.id);
                   setshowSuccesDialog(true);
                 })
@@ -86,8 +81,8 @@ function FeedBack() {
         visibility={showSuccesDialog}
         onPress={() => {
           setshowSuccesDialog(false);
-          navigation.navigate('ContextPicker');
-          BackHandler.exitApp();
+          route.params.cleanScreen(null);
+          setTimeout(() => BackHandler.exitApp(), 250)
         }}
       />
     </View>
