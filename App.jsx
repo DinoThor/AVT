@@ -29,7 +29,7 @@ function App() {
     });
 
     getUserName().then((value) => { setisLogged(value != null) });
-    return () => sub.remove()
+    return () => sub.remove();
   }, []);
 
 

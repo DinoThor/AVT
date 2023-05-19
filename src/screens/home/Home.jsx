@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   StyleSheet,
   StatusBar,
@@ -8,62 +8,86 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import MoodPicker from '../mood/MoodPicker'
 import ContextPicker from '../context/ContextPicker';
-import FeedBack from '../feedback/FeedBack';
+import FeedBackScreen from '../feedback/FeedBack';
 
-import { useNavigation } from '@react-navigation/native';
 import { createSesion, lastSession } from '../../utils/dataService';
+import SplashScreen from '../../components/splashScreen/SplashScreen';
 
 const Stack = createStackNavigator();
 
-function askFeedBack({ navigation }) {
-  lastSession().then((values) => {
-    if (values['mood_inicial'] > 0 && values['mood_final'] == 0)
-      navigation.navigate('FeedBack');
-    else if (values['mood_inicial'] > 0 && values['mood_final'] != 0)
-      createSesion(); 
-  })
-}
-
 function Home() {
-  const navigation = useNavigation();
+  const [FeedBack, setFeedBack] = useState(null);
+
+  function askFeedBack() {
+    lastSession().then((values) => {
+      if (values == undefined) {
+        createSesion();
+        setFeedBack(false);
+        return;
+      }
+
+      if (values['mood_inicial'] > 0 && values['mood_final'] == 0)
+        setFeedBack(true);
+      else if (values['mood_inicial'] > 0 && values['mood_final'] != 0) {
+        createSesion();
+        setFeedBack(false);
+      } else {
+        setFeedBack(false);
+      }
+    })
+  }
 
   useEffect(() => {
-    askFeedBack({navigation});
+    askFeedBack();
     const handleChange = (newState) => {
-      if (newState == 'active') askFeedBack({navigation});
+      if (newState == 'active') askFeedBack();
     }
     const sub = AppState.addEventListener('change', handleChange);
     return () => { sub.remove() }
-
   }, []);
 
+
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="ContextPicker"
-        component={ContextPicker}
-        options={{
-          headerShown: false,
-        }}
-        styles={styles.home}
-      />
-      <Stack.Screen
-        name="MoodPicker"
-        component={MoodPicker}
-        options={{
-          headerShown: false
-        }}
-        styles={styles.home}
-      />
-      <Stack.Screen
-        name="FeedBack"
-        component={FeedBack}
-        options={{
-          headerShown: false
-        }}
-        styles={styles.home}
-      />
-    </Stack.Navigator>
+    FeedBack != null ?
+      (
+          <Stack.Navigator>
+            {!FeedBack ?
+              <>
+                <Stack.Screen
+                  name="ContextPicker"
+                  component={ContextPicker}
+                  options={{
+                    headerShown: false,
+                  }}
+                  styles={styles.home}
+                />
+                <Stack.Screen
+                  name="MoodPicker"
+                  component={MoodPicker}
+                  options={{
+                    headerShown: false
+                  }}
+                  styles={styles.home}
+                  initialParams={{cleanScreen: setFeedBack}}
+                />
+              </>
+              :
+              <Stack.Screen
+                name="FeedBack"
+                component={FeedBackScreen}
+                options={{
+                  headerShown: false
+                }}
+                styles={styles.home}
+                initialParams={{cleanScreen: setFeedBack}}
+              />
+            }
+          </Stack.Navigator>
+      )
+      :
+      (
+        <SplashScreen />
+      )
   );
 };
 

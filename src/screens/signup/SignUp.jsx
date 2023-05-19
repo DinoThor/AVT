@@ -31,7 +31,6 @@ function SignUp({change}) {
     }
 
     createUser(name, age, phone, checked);
-    registerUser(); 
     change(true);   
   }
 

@@ -5,9 +5,10 @@ import {
   ActivityIndicator
 } from 'react-native';
 
-import QrScanner from '../../components/qrScanner/QrScanner';
 import { getUserName } from '../../utils/dataService';
 import { sendData } from './API';
+
+import QrScanner from '../../components/qrScanner/QrScanner';
 import SuccesDialog from '../../components/succesDialog/succesDialog';
 
 function Backup() {
@@ -21,7 +22,6 @@ function Backup() {
 
   useEffect(() => {
     if (url != null) {
-      console.log(user);
       sendData(user, url);
       setsucces(true);
     }

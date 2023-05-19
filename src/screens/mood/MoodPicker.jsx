@@ -7,11 +7,12 @@ import {
   View,
   BackHandler
 } from 'react-native';
+
 import { getMood, lastSession, updateSesion } from '../../utils/dataService';
 
 import SuccesDialog from '../../components/succesDialog/succesDialog';
 import Header from '../../components/header/Header';
-import SplashScreen from 'react-native-splash-screen';
+
 
 
 const Item = ({ item, onPress }) => (
@@ -28,7 +29,7 @@ const Item = ({ item, onPress }) => (
 );
 
 
-const MoodPicker = ({ navigation, route }) => {
+const MoodPicker = ({ route }) => {
   const [dataList, setDataList] = useState([]);
   const [showSuccesDialog, setshowSuccesDialog] = useState(false);
 
@@ -81,9 +82,8 @@ const MoodPicker = ({ navigation, route }) => {
         visibility={showSuccesDialog}
         onPress={() => {
           setshowSuccesDialog(false);
-          navigation.navigate('ContextPicker');
-          SplashScreen.show();
-          BackHandler.exitApp();
+          route.params.cleanScreen(null);
+          setTimeout(() => BackHandler.exitApp(), 250)
         }}
       />
     </View>

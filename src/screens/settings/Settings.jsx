@@ -5,18 +5,12 @@ import {
 
 import Divider from './Divider';
 
-import SendCsvButton from './sendCSV/SendCsvButton';
-import EditEmailCSV from './setEmailCSV/EmailModal';
-import CopyDB from './copyDatabase/CopyDB';
 
 function Settings() {
   return (
     <View style={styles.container}>
       <Divider title={"CSV"}/>
-      <EditEmailCSV styles={styles}/>
-      <SendCsvButton styles={styles}/>
       <Divider title={"DB"}/>
-      <CopyDB styles={styles}/>
     </View>
   );
 };
