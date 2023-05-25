@@ -202,7 +202,7 @@ export async function updateSesion(id, mood, context) {
   db.transaction((txn) => {
     txn.executeSql(
       'UPDATE sesion SET id_contexto = ?, mood_inicial = ? WHERE id_sesion = ?',
-      [mood, context, id],
+      [context, mood, id],
       (tx, result) => { },
       (err) => console.log(err)
     )
